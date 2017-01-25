@@ -1,7 +1,6 @@
 <template>
 <div class="pure-menu custom-restricted-width">
-
-    <div v-for="item in data">
+    <div v-for="item in menuData">
         <span class="pure-menu-heading" >{{ item.year }}</span>
 
         <ul class="pure-menu-list">
@@ -16,26 +15,7 @@
 <script>
 module.exports = {
     name: 'menu-component',
-    data: function controller() {
-        return {
-            data: [
-                {
-                    year: 2016,
-                    items: [
-                        {name: 'January', id: '2016-01'},
-                        {name: 'February', id: '2016-02'}
-                    ],
-                },
-                {
-                    year: 2017,
-                    items: [
-                        {name: 'January', id: '2015-01'},
-                        {name: 'February', id: '2015-02'}
-                    ],
-                }
-            ]
-        };
-    }
+    props: ['menuData']
 };
 </script>
 

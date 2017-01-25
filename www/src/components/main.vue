@@ -7,10 +7,10 @@
         </div>
         <div class="pure-g">
             <div class="pure-u-1-5">
-                <menu-component/>
+                <menu-component :menuData="instagram.menuItems"/>
             </div>
             <div class="pure-u-3-5">
-                ...
+                {{ instagram[0] }}
             </div>
         </div>
 
@@ -19,10 +19,10 @@
 
 <script>
 var Menu = require('./menu.vue');
-console.log(Menu);
-
-module.exports = {
+    
+var main = {
     name: 'main',
+    props: ['instagram'],
     data: function controller() {
         return {
             username: 'test'
@@ -32,6 +32,8 @@ module.exports = {
         'menu-component': Menu
     }
 };
+
+module.exports = main;
 </script>
 
 <style></style>
