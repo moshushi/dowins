@@ -9,8 +9,8 @@
             <div class="pure-u-1-5">
                 <menu-component :menuData="instagram.menuItems"/>
             </div>
-            <div class="pure-u-3-5">
-                {{ instagram[0] }}
+            <div class="pure-u-4-5">
+                <grid-component :gridData="instagram.images"/>
             </div>
         </div>
 
@@ -19,6 +19,7 @@
 
 <script>
 var Menu = require('./menu.vue');
+var Grid = require('./grid.vue');
     
 var main = {
     name: 'main',
@@ -29,7 +30,8 @@ var main = {
         };
     },
     components: {
-        'menu-component': Menu
+        'menu-component': Menu,
+        'grid-component': Grid
     }
 };
 

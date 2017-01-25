@@ -5,7 +5,7 @@
 
         <ul class="pure-menu-list">
             <li class="pure-menu-item" v-for="m in item.items">
-                <a v-bind:href="'#/' + m.id" class="pure-menu-link">{{ m.name }}</a>
+                <a :href="'#/' + m.id" class="pure-menu-link">{{ m.name }}</a>
             </li>
         </ul>
     </div>
