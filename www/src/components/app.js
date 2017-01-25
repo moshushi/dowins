@@ -6,6 +6,7 @@ function processInstagram(data) {
     var lastMonth = null;
     var images = [];
     var menuItems = [];
+    var monthIds = [];
     var menuIndex = 0;
     var monthNames = [
         'January', 'February', 'March', 'April', 'May', 'June',
@@ -21,18 +22,21 @@ function processInstagram(data) {
             lastYear = year;
         }
         var month = itemDate.getMonth();
+        var monthId = year + '-' + (month + 1 > 9 ? month + 1 : '0' + (month + 1));
         if (month !== lastMonth) {
             menuItems[menuIndex].items.push({
                 name: monthNames[month],
-                id: year + '-' + (month + 1)
+                id: monthId
             });
+            monthIds.push(monthId);
             lastMonth = month;
         }
         images.push(item);
     });
     return {
         menuItems: menuItems,
-        images: images
+        images: images,
+        defaultMonth: monthIds[0]
     };
 }
 

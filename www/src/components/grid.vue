@@ -1,6 +1,6 @@
 <template>
 <div class="pure-g">
-    <div v-for="item in gridData" class="pure-u-1-5">
+    <div v-for="item in Grid" class="pure-u-1-5">
         <div class="padded">
             <div class="image" :style="'background-image: url(img/' + item.filename + ')'">
                 <img :src="placeholder" class="pure-img">
@@ -10,18 +10,7 @@
 </div>
 </template>
 
-<script>
-var empty = require('../assets/d.png');
-module.exports = {
-    name: 'grid-component',
-    props: ['gridData'],
-    data: function controller() {
-        return {
-            placeholder: empty
-        };
-    },
-};
-</script>
+<script src="./grid.js"></script>
 
 <style scoped>
     .padded {

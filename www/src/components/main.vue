@@ -10,7 +10,7 @@
                 <menu-component :menuData="instagram.menuItems"/>
             </div>
             <div class="pure-u-4-5">
-                <grid-component :gridData="instagram.images"/>
+                <grid-component :gridData="instagram.images" :defaultMonth="instagram.defaultMonth"/>
             </div>
         </div>
 
