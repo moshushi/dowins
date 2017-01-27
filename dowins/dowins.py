@@ -37,7 +37,7 @@ def parse(html_doc):
 #     print list_of_script[0]
 #     dt = list_of_script[4]
 #     data = json.loads(dt.text)
-    print list_of_script[4]
+    print list_of_script[4].prettify()
 #     return soup
 
 #     data = soup.find('script', type='text/javascript')
