@@ -5,6 +5,7 @@ Prototype
 """
 
 import requests
+import json
 from bs4 import BeautifulSoup
 
 BASE_URL = "https://www.instagram.com/"
@@ -30,12 +31,22 @@ def get_html(url):
 
 def parse(html_doc):
     soup = BeautifulSoup(html_doc, 'html.parser')
-    return soup
+#     print soup
+
+    list_of_script = soup.findAll("script", type='text/javascript')
+#     print list_of_script[0]
+#     dt = list_of_script[4]
+#     data = json.loads(dt.text)
+    print list_of_script[4]
+#     return soup
+
+#     data = soup.find('script', type='text/javascript')
+#     print data
 
 def process_page(url):
     html = get_html(url)
     data = parse(html)
-    print data
+#     print data
 
 def main():
     process_page(BASE_URL + NAME_ACCOUNT)
