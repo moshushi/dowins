@@ -45,6 +45,7 @@ def parse(html_doc):
     for i in list_of_script:
         if '_sharedData' in i.text:
             print i.text
+            return i.text
 #     return soup
 
 #     data = soup.find('script', type='text/javascript')
@@ -53,6 +54,9 @@ def parse(html_doc):
 def process_page(url):
     html = get_html(url)
     data = parse(html)
+#     dagajs = json.loads(data)
+    print '===='
+#     print dagajs.decode('utf-8').encode('cp1251')
 #     print data
 
 def main():
