@@ -33,11 +33,18 @@ def parse(html_doc):
     soup = BeautifulSoup(html_doc, 'html.parser')
 #     print soup
 
-    list_of_script = soup.findAll("script", type='text/javascript')
+    list_of_script = soup.findAll(name="script", type='text/javascript')
 #     print list_of_script[0]
 #     dt = list_of_script[4]
 #     data = json.loads(dt.text)
     print list_of_script[4].prettify()
+#     some_script = soup.find(name="script", type='text/javascript', text='_sharedData')
+    some_script = soup.find(name="script", type='text/javascript')
+#     print some_script.text
+    print '----'
+    for i in list_of_script:
+        if '_sharedData' in i.text:
+            print i.text
 #     return soup
 
 #     data = soup.find('script', type='text/javascript')
