@@ -7,6 +7,7 @@ Prototype
 import requests
 import json
 from bs4 import BeautifulSoup
+from ast import literal_eval
 
 BASE_URL = "https://www.instagram.com/"
 # NAME_ACCOUNT = "abc"
@@ -29,17 +30,22 @@ def get_html(url):
 #     return response.text
     return response.text
 
-def get_dict_from_html(html_doc):
+def get_unit_from_html(html_doc):
     soup = BeautifulSoup(html_doc, 'html.parser')
 
     list_of_script = soup.findAll(name="script", type='text/javascript')
     for i in list_of_script:
         if '_sharedData' in i.text:
-#             print i.text
-            cutter =  i.text.find('=') + 2
-#             print cutter
-            print i.text[cutter:]
-            return i.text[cutter:]
+            cutter =  i.text.find('=')
+#             print i.text[cutter + 2: -1]
+            return i.text[cutter + 2: -1]
+
+def get_dict_from_unit(unit_string):
+    obj = json.loads(unit_string)
+    profile_page = obj[u'entry_data']
+    page_content = profile_page[u'ProfilePage'][0]
+    print page_content
+
 
 def parse(uni_row):
 #     print string
@@ -48,7 +54,8 @@ def parse(uni_row):
 
 def process_page(url):
     html = get_html(url)
-    dict_row = get_dict_from_html(html)
+    unit_row = get_unit_from_html(html)
+    get_dict_from_unit(unit_row)
 #     data = parse(dict_row)
 #     print '===='
 #     print dagajs.decode('utf-8').encode('cp1251')
