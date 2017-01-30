@@ -29,33 +29,28 @@ def get_html(url):
 #     return response.text
     return response.text
 
-def parse(html_doc):
+def get_dict_from_html(html_doc):
     soup = BeautifulSoup(html_doc, 'html.parser')
-#     print soup
 
     list_of_script = soup.findAll(name="script", type='text/javascript')
-#     print list_of_script[0]
-#     dt = list_of_script[4]
-#     data = json.loads(dt.text)
-    print list_of_script[4].prettify()
-#     some_script = soup.find(name="script", type='text/javascript', text='_sharedData')
-    some_script = soup.find(name="script", type='text/javascript')
-#     print some_script.text
-    print '----'
     for i in list_of_script:
         if '_sharedData' in i.text:
-            print i.text
-            return i.text
-#     return soup
+#             print i.text
+            cutter =  i.text.find('=') + 2
+#             print cutter
+            print i.text[cutter:]
+            return i.text[cutter:]
 
-#     data = soup.find('script', type='text/javascript')
-#     print data
+def parse(uni_row):
+#     print string
+#     print dict_row["media"]
+    pass
 
 def process_page(url):
     html = get_html(url)
-    data = parse(html)
-#     dagajs = json.loads(data)
-    print '===='
+    dict_row = get_dict_from_html(html)
+#     data = parse(dict_row)
+#     print '===='
 #     print dagajs.decode('utf-8').encode('cp1251')
 #     print data
 
