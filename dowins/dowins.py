@@ -12,6 +12,7 @@ from ast import literal_eval
 BASE_URL = "https://www.instagram.com/"
 # NAME_ACCOUNT = "abc"
 NAME_ACCOUNT = "polovinkinandrey"
+# NAME_ACCOUNT = "NBA"
 # NAME_ACCOUNT = "frenzytechnix"
 
 def get_html(url):
@@ -42,9 +43,14 @@ def get_unit_from_html(html_doc):
 
 def get_dict_from_unit(unit_string):
     obj = json.loads(unit_string)
-    profile_page = obj[u'entry_data']
-    page_content = profile_page[u'ProfilePage'][0]
-    print page_content
+    data_li = obj[u'entry_data'][u'ProfilePage'][0][u'user'][u'media'][u'nodes']
+    print data_li
+    print type(data_li)
+    print len(data_li)
+    for i in data_li:
+        print i
+##### u'code' - is number of page on pose
+
 
 
 def parse(uni_row):
