@@ -13,10 +13,10 @@ from ast import literal_eval
 
 BASE_URL = u'https://www.instagram.com/'
 BASE_SUFFIX_POST = u'p/'
-# NAME_ACCOUNT = "abc"
-NAME_ACCOUNT = "polovinkinandrey"
+NAME_ACCOUNT = "abc"
+# NAME_ACCOUNT = "polovinkinandrey"
 # NAME_ACCOUNT = "NBA"
-# NAME_ACCOUNT = "frenzytechnix"
+NAME_ACCOUNT = "frenzytechnix"
 
 def get_html(url):
     """
@@ -53,7 +53,7 @@ def get_dict_from_unit(unit_string):
     for i in data_li:
         print i
         print i[u'code']
-        print type(i[u'date'])
+#         print type(i[u'date'])
         j = {u'date':arrow.get(i[u'date']).format('YYYY-MM-DD'), u'url':BASE_URL + BASE_SUFFIX_POST + i[u'code']}
         print j
 ##### u'code' - is number of page on pose
