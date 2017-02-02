@@ -6,10 +6,13 @@ Prototype
 
 import requests
 import json
+import arrow
+#### http://crsmithdev.com/arrow/
 from bs4 import BeautifulSoup
 from ast import literal_eval
 
-BASE_URL = "https://www.instagram.com/"
+BASE_URL = u'https://www.instagram.com/'
+BASE_SUFFIX_POST = u'p/'
 # NAME_ACCOUNT = "abc"
 NAME_ACCOUNT = "polovinkinandrey"
 # NAME_ACCOUNT = "NBA"
@@ -49,6 +52,10 @@ def get_dict_from_unit(unit_string):
     print len(data_li)
     for i in data_li:
         print i
+        print i[u'code']
+        print type(i[u'date'])
+        j = {u'date':arrow.get(i[u'date']).format('YYYY-MM-DD'), u'url':BASE_URL + BASE_SUFFIX_POST + i[u'code']}
+        print j
 ##### u'code' - is number of page on pose
 
 
