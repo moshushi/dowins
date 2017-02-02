@@ -53,8 +53,27 @@ def get_dict_from_unit(unit_string):
     for i in data_li:
         print i
         print i[u'code']
+        print '----'
+#         print i.keys()
+        for key in i.keys():
+            print key
+        print '======'
+        print i
+        if u'caption' in i.keys():
+            print i[u'caption'].encode('utf-8')
+#         print i[u'caption'].encode('cp1251')
+#             print key + ' -> ' + i[key]
+#             print "%u -> %u" % (key, i[key])
+#         for key in i.keys():
+#             print "%s -> %s" % (key, i[key])
+        print '----'
 #         print type(i[u'date'])
         j = {u'date':arrow.get(i[u'date']).format('YYYY-MM-DD'), u'url':BASE_URL + BASE_SUFFIX_POST + i[u'code']}
+        print j
+        if u'caption' in i.keys():
+            print i[u'caption'].encode('utf-8')
+            j[u'text'] = i[u'caption']
+        print '*****'
         print j
 ##### u'code' - is number of page on pose
 
