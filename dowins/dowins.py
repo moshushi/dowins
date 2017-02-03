@@ -85,8 +85,16 @@ def remake(some_dict):
     for key in some_dict:
         pass
 #         print key
+#     print some_dict[u'display_src']
+    print some_dict[u'comments']
 
     print some_dict
+    print len(some_dict)
+    # remove some pair from dictionary
+    list_item_for_remove = [u'owner',u'id', u'dimensions', u'comments_disabled',
+                            u'thumbnail_src', u'is_video']
+    for item in list_item_for_remove:
+        some_dict.pop(item, None)
 
     # date in pretty format
     some_dict[u'date'] = arrow.get(some_dict[u'date']).format('YYYY-MM-DD')
@@ -98,11 +106,19 @@ def remake(some_dict):
     some_dict[u'text'] = some_dict.pop(u'caption')
 #     print some_dict[u'text'].encode('utf-8')  # test print
 
+    # Image source url
+    s = some_dict.pop(u'display_src')
+    sep = u'.jpg'
+    rest = s.split(u'.jpg')[0] + u'.jpg'
+
+    some_dict[u'img-source'] = rest
+
     # like's
     some_dict[u'likes'] = some_dict[u'likes'][u'count']
 
     print some_dict
 
+    print len(some_dict)
 
 def parse(uni_row):
 #     print string
