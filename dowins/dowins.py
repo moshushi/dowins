@@ -4,9 +4,7 @@ Script downloads and wrap foto and metainformation from INSTARGAM
 Prototype
 """
 
-import requests
-import json
-import arrow
+import requests, json, arrow
 #### http://crsmithdev.com/arrow/
 from bs4 import BeautifulSoup
 from ast import literal_eval
@@ -23,9 +21,9 @@ TEST_SOME_DICT = {u'code': u'BOPfznag78S', u'dimensions': {u'width': 1080, u'hei
 
 URL_ONE_PAGE = u'https://www.instagram.com/p/BOPfznag78S/'
 
+
 def get_html(url):
-    """
-    Get html from website
+    """ Get html from website
     """
     try:
         response = requests.get(url)
@@ -39,7 +37,10 @@ def get_html(url):
 #     return response.text
     return response.text
 
-def get_unit_from_html(html_doc):
+
+def get_unit_rawdata_from_html(html_doc):
+    """Parse data from Title page for get raw metainformation
+    """
     soup = BeautifulSoup(html_doc, 'html.parser')
 
     list_of_script = soup.findAll(name="script", type='text/javascript')
@@ -49,38 +50,38 @@ def get_unit_from_html(html_doc):
 #             print i.text[cutter + 2: -1]
             return i.text[cutter + 2: -1]
 
+
 def get_dict_from_unit(unit_string):
+    """Get raw dictionary from raw data
+    """
     obj = json.loads(unit_string)
     data_li = obj[u'entry_data'][u'ProfilePage'][0][u'user'][u'media'][u'nodes']
     return data_li
 
-def change_obg_in_data():
-    for i in data_li:
-        print remake(i)
-        pass
 
-#         print '======'
+def change_obg_in_data(data_li):
+    """Change dictionary in list on true dictionary
+    """
+    new_list = [ remake(i) for i in data_li ]
+#     print new_list
+#     print '*****'
+#     for i in new_list:
 #         print i
-#         if u'caption' in i.keys():
+#     print '*****'
+    return new_list
+
 #             print i[u'caption'].encode('utf-8')
-            ## for testing
-#         print '----'
 
 def remake(some_dict):
-    """Recreate dictionary for output
+    """Modify dictionary for output in correct format for specification
     Function get dictonary from parsing page select and rename key with their values
     Return non-true dictionary
     """
     for key in some_dict:
         pass
 #         print key
-#         print type(some_dict[key])
-#         print some_dict[key]
-#     print some_dict[u'display_src']
 #     print some_dict[u'comments']
 
-#     print some_dict
-#     print len(some_dict)
     # remove some pair from dictionary
     list_item_for_remove = [u'owner',u'id', u'dimensions', u'comments_disabled',
                             u'thumbnail_src', u'is_video']
@@ -122,18 +123,16 @@ def remake(some_dict):
 #     print len(some_dict)
 
 def parse(uni_row):
-#     print string
-#     print dict_row["media"]
     pass
 
 def process_unit_page(url):
+    """Processing title list in instagram account
+    """
     html = get_html(url)
-    unit_row = get_unit_from_html(html)
-    get_dict_from_unit(unit_row)
-#     data = parse(dict_row)
-#     print '===='
-#     print dagajs.decode('utf-8').encode('cp1251')
-#     print data
+    unit_row = get_unit_rawdata_from_html(html)
+    data_li = get_dict_from_unit(unit_row)
+    print change_obg_in_data(data_li)
+
 
 def main():
     process_unit_page(BASE_URL + NAME_ACCOUNT)
