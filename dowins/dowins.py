@@ -18,7 +18,10 @@ NAME_ACCOUNT = "abc"
 # NAME_ACCOUNT = "NBA"
 NAME_ACCOUNT = "frenzytechnix"
 
-TEST_SOME_DICT = {u'code': u'BQA3H09gCPm', u'dimensions': {u'width': 1080, u'height': 1350}, u'caption': u'Kiev TV tower.\n#\u043a\u0438\u0457\u0432 #\u043a\u0438\u0435\u0432 #kyiv #kiev #tvtower #televisiontower', u'comments_disabled': False, u'comments': {u'count': 0}, u'date': 1486047613, u'likes': {u'count': 24}, u'owner': {u'id': u'43237241'}, u'thumbnail_src': u'https://scontent-fra3-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/c0.135.1080.1080/16465279_1351964604878196_3035221119993905152_n.jpg?ig_cache_key=MTQ0MTM5NDMxMTIxOTM4OTQxNA%3D%3D.2.c', u'is_video': False, u'id': u'1441394311219389414', u'display_src': u'https://scontent-fra3-1.cdninstagram.com/t51.2885-15/e35/16465279_1351964604878196_3035221119993905152_n.jpg?ig_cache_key=MTQ0MTM5NDMxMTIxOTM4OTQxNA%3D%3D.2'}
+# TEST_SOME_DICT = {u'code': u'BQA3H09gCPm', u'dimensions': {u'width': 1080, u'height': 1350}, u'caption': u'Kiev TV tower.\n#\u043a\u0438\u0457\u0432 #\u043a\u0438\u0435\u0432 #kyiv #kiev #tvtower #televisiontower', u'comments_disabled': False, u'comments': {u'count': 0}, u'date': 1486047613, u'likes': {u'count': 24}, u'owner': {u'id': u'43237241'}, u'thumbnail_src': u'https://scontent-fra3-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/c0.135.1080.1080/16465279_1351964604878196_3035221119993905152_n.jpg?ig_cache_key=MTQ0MTM5NDMxMTIxOTM4OTQxNA%3D%3D.2.c', u'is_video': False, u'id': u'1441394311219389414', u'display_src': u'https://scontent-fra3-1.cdninstagram.com/t51.2885-15/e35/16465279_1351964604878196_3035221119993905152_n.jpg?ig_cache_key=MTQ0MTM5NDMxMTIxOTM4OTQxNA%3D%3D.2'}
+TEST_SOME_DICT = {u'code': u'BOPfznag78S', u'dimensions': {u'width': 1080, u'height': 1080}, u'caption': u'\u0418\u0433\u0440\u0430\u0435\u043c \u0441 \u041a\u043e\u0441\u0442\u0435\u0439 \u0432 \u043d\u0430\u0441\u0442\u043e\u043b\u044c\u043d\u0443\u044e \u0440\u043e\u043b\u0435\u0432\u043a\u0443 Hero Kids. \u0413\u041c \u0438\u0437 \u043c\u0435\u043d\u044f \u0442\u0430\u043a \u0441\u0435\u0431\u0435, \u0434\u0430 \u0435\u0449\u0435 \u0438 \u0441 \u043a\u0443\u0431\u0438\u043a\u0430\u043c\u0438 \u041a\u043e\u0441\u0442\u0435 \u043d\u0435 \u0432\u0435\u0437\u043b\u043e, \u043d\u043e \u0442\u0435\u043c \u043d\u0435 \u043c\u0435\u043d\u0435\u0435 \u0434\u0435\u0442\u0438-\u043f\u0440\u0438\u043a\u043b\u044e\u0447\u0435\u043d\u0446\u044b \u0433\u0435\u0440\u043e\u0438\u0447\u0435\u0441\u043a\u0438 \u043f\u0440\u0435\u0432\u043e\u0437\u043c\u043e\u0433\u043b\u0438 \u043a\u0440\u044b\u0441\u0438\u043d\u043e\u0433\u043e \u043a\u043e\u0440\u043e\u043b\u044f ;)\n#herokids #roleplay #boardgame #pnprpg', u'comments_disabled': False, u'comments': {u'count': 1}, u'date': 1482243738, u'likes': {u'count': 22}, u'owner': {u'id': u'43237241'}, u'thumbnail_src': u'https://scontent-bru2-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/15338486_1551801051502691_5653328674196291584_n.jpg?ig_cache_key=MTQwOTQ4NTA5NDg0NjE4NTIzNA%3D%3D.2', u'is_video': False, u'id': u'1409485094846185234', u'display_src': u'https://scontent-bru2-1.cdninstagram.com/t51.2885-15/e35/15338486_1551801051502691_5653328674196291584_n.jpg?ig_cache_key=MTQwOTQ4NTA5NDg0NjE4NTIzNA%3D%3D.2'}
+
+URL_ONE_PAGE = u'https://www.instagram.com/p/BOPfznag78S/'
 
 def get_html(url):
     """
@@ -49,47 +52,35 @@ def get_unit_from_html(html_doc):
 def get_dict_from_unit(unit_string):
     obj = json.loads(unit_string)
     data_li = obj[u'entry_data'][u'ProfilePage'][0][u'user'][u'media'][u'nodes']
-#     print data_li
-    print type(data_li)
-    print len(data_li)
-    print data_li[1]
-    for i in data_li:
-        print i
-        print i[u'code']
-        print '----'
-#         print i.keys()
-        for key in i.keys():
-            print key
+    return data_li
 
-        print '======'
-        print i
+def change_obg_in_data():
+    for i in data_li:
+        print remake(i)
+        pass
+
+#         print '======'
+#         print i
 #         if u'caption' in i.keys():
 #             print i[u'caption'].encode('utf-8')
             ## for testing
-        print '----'
-#         print type(i[u'date'])
-        j = {u'date':arrow.get(i[u'date']).format('YYYY-MM-DD'), u'url':BASE_URL + BASE_SUFFIX_POST + i[u'code']}
-        print j
-        if u'caption' in i.keys():
-#             print i[u'caption'].encode('utf-8')
-            ## for testing
-            j[u'text'] = i[u'caption']
-        print '*****'
-        print j
-##### u'code' - is number of page on pose
+#         print '----'
 
 def remake(some_dict):
     """Recreate dictionary for output
     Function get dictonary from parsing page select and rename key with their values
+    Return non-true dictionary
     """
     for key in some_dict:
         pass
 #         print key
+#         print type(some_dict[key])
+#         print some_dict[key]
 #     print some_dict[u'display_src']
-    print some_dict[u'comments']
+#     print some_dict[u'comments']
 
-    print some_dict
-    print len(some_dict)
+#     print some_dict
+#     print len(some_dict)
     # remove some pair from dictionary
     list_item_for_remove = [u'owner',u'id', u'dimensions', u'comments_disabled',
                             u'thumbnail_src', u'is_video']
@@ -103,7 +94,10 @@ def remake(some_dict):
     some_dict[u'url'] = BASE_URL + BASE_SUFFIX_POST + some_dict.pop(u'code')
 
     # caption:text
-    some_dict[u'text'] = some_dict.pop(u'caption')
+    if u'caption' in some_dict:
+        some_dict[u'text'] = some_dict.pop(u'caption')
+    else:
+        some_dict[u'text'] = ""
 #     print some_dict[u'text'].encode('utf-8')  # test print
 
     # Image source url
@@ -116,16 +110,23 @@ def remake(some_dict):
     # like's
     some_dict[u'likes'] = some_dict[u'likes'][u'count']
 
-    print some_dict
+    # Count comments
+#     some_dict[u'count-comments'] = some_dict[u'comments'][u'count']
+    # If have comments run function get_comments()
+    if some_dict[u'comments'][u'count'] > 0:
+        pass
 
-    print len(some_dict)
+#     print some_dict
+    return some_dict
+
+#     print len(some_dict)
 
 def parse(uni_row):
 #     print string
 #     print dict_row["media"]
     pass
 
-def process_page(url):
+def process_unit_page(url):
     html = get_html(url)
     unit_row = get_unit_from_html(html)
     get_dict_from_unit(unit_row)
@@ -135,8 +136,8 @@ def process_page(url):
 #     print data
 
 def main():
-#     process_page(BASE_URL + NAME_ACCOUNT)
-    remake(TEST_SOME_DICT)
+    process_unit_page(BASE_URL + NAME_ACCOUNT)
+#     remake(TEST_SOME_DICT)
 
 
 if __name__ == '__main__':
