@@ -80,10 +80,10 @@ def remake(some_dict):
     Function get dictonary from parsing page select and rename key with their values
     Return non-true dictionary
     """
-    for key in some_dict:
-        pass
-        print key
-    print some_dict[u'code']
+#     for key in some_dict:
+#         pass
+#         print key
+#     print some_dict[u'code']
 #     print some_dict[u'comments']
 
     # remove some pair from dictionary
@@ -95,12 +95,13 @@ def remake(some_dict):
     # date in pretty format
     some_dict[u'date'] = arrow.get(some_dict[u'date']).format('YYYY-MM-DD')
 
-    # add url from key:code
+    #  url from key to code
     some_dict[u'url'] = BASE_URL + BASE_SUFFIX_POST + some_dict.pop(u'code')
 
     # caption:text
     if u'caption' in some_dict:
         some_dict[u'text'] = some_dict.pop(u'caption')
+        pass
     else:
         some_dict[u'text'] = ""
 #     print some_dict[u'text'].encode('utf-8')  # test print
@@ -115,15 +116,24 @@ def remake(some_dict):
     # like's
     some_dict[u'likes'] = some_dict[u'likes'][u'count']
 
+#     print "===="
+#     print some_dict
+#     print some_dict[u'url']
+#     print "===="
+
     # Count comments
 #     some_dict[u'count-comments'] = some_dict[u'comments'][u'count']
     # If have comments run function get_comments()
     if some_dict[u'comments'][u'count'] > 0:
         """vvogu zdes
         """
-#         get_comments(
+#         print '**'
+#         print get_comments(some_dict[u'url'])
+#         print '**'
+#         print get_comments(some_dict[u'url'])
+        some_dict[u'comments'] = get_comments(some_dict[u'url'])
         pass
-
+#
 #     print some_dict
     return some_dict
 
@@ -139,7 +149,7 @@ def process_unit_page(url):
     unit_row = get_unit_rawdata_from_html(html)
     data_li = get_dict_from_unit(unit_row)
 # #     print change_obg_in_data(data_li)
-    print change_obg_in_data(data_li)
+#     print change_obg_in_data(data_li)
     return change_obg_in_data(data_li)
 
 
@@ -155,14 +165,6 @@ def get_dict_from_one(one_string):
     obj = json.loads(one_string)
 
     data_li = obj[u'entry_data'][u'PostPage'][0][u'media'][u'comments'][u'nodes']
-#     data_li = obj[u'entry_data'][u'PostPage'][0][u'media'][u'comments'][u'nodes'][2]
-#     for i in data_li:
-#         print i
-# #         print i, "-->", data_li[i]
-#
-#     print '-----'
-#     print len(data_li)
-#     print '-----'
     return data_li
 
 
@@ -209,11 +211,12 @@ def get_comments(url):
     pass
 
 def main():
-# #     process_unit_page(BASE_URL + NAME_ACCOUNT)
+#     process_unit_page(BASE_URL + NAME_ACCOUNT)
 #     print get_comments(URL_ONE_PAGE)
-# #     remake(TEST_SOME_DICT)
+#     remake(TEST_SOME_DICT)
 #     remake_comment(TEST_COMM_DICT)
-    process_unit_page(BASE_URL+NAME_ACCOUNT)
+#
+    print process_unit_page(BASE_URL + NAME_ACCOUNT)
     pass
 
 if __name__ == '__main__':
