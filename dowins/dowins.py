@@ -5,6 +5,7 @@ Prototype
 """
 
 import requests, json, arrow
+# import io
 #### http://crsmithdev.com/arrow/
 from bs4 import BeautifulSoup
 from ast import literal_eval
@@ -24,6 +25,10 @@ TEST_COMM_DICT = {u'text': u'Account/name for sale ?', u'created_at': 1478387038
 # URL_ONE_PAGE = u'https://www.instagram.com/p/BOPfznag78S/'
 # URL_ONE_PAGE = u'https://www.instagram.com/p/BPo_wvZgCrL/'
 URL_ONE_PAGE = u'https://www.instagram.com/p/BMU8EkDAgZH/'
+
+def time_to_iso(timestamp):
+#     print arrow.get(timestamp).isoformat(sep='T')
+    return arrow.get(timestamp).isoformat(sep='T')
 
 def get_html(url):
     """ Get html from website
@@ -93,7 +98,8 @@ def remake(some_dict):
         some_dict.pop(item, None)
 
     # date in pretty format
-    some_dict[u'date'] = arrow.get(some_dict[u'date']).format('YYYY-MM-DD')
+#     some_dict[u'date'] = arrow.get(some_dict[u'date']).format('YYYY-MM-DD')
+    some_dict[u'date'] = time_to_iso(some_dict[u'date'])
 
     #  url from key to code
     some_dict[u'url'] = BASE_URL + BASE_SUFFIX_POST + some_dict.pop(u'code')
@@ -177,7 +183,8 @@ def remake_comment(dict_comm):
 
     # date in pretty format
 #     dict_comm[u'date'] = arrow.get(dict_comm[u'created_at']).format('YYYY-MM-DD')
-    dict_comm[u'date'] = arrow.get(dict_comm.pop(u'created_at')).format('YYYY-MM-DD')
+#     dict_comm[u'date'] = arrow.get(dict_comm.pop(u'created_at')).format('YYYY-MM-DD')
+    dict_comm[u'date'] = time_to_iso(dict_comm.pop(u'created_at'))
 
     # text in comment don't change
 
@@ -217,8 +224,11 @@ def save_data(name, output):
     """Write metadata to file
     """
     namefile = name + u'.json'
-    with open(namefile, 'w') as jsfile:
-        jsfile.write(json.dumps(output, indent=4, sort_keys=True))
+#     with open(namefile, 'w') as jsfile:
+    with open(namefile, 'w') as json_file:
+        data = json.dumps(output, indent=4, sort_keys=True, encoding='utf8')
+        json_file.write(data)
+#         jsfile.write(json.dumps(output, indent=4, sort_keys=True).decode('utf8'))
     pass
 
 def main():
@@ -228,6 +238,9 @@ def main():
 #     remake_comment(TEST_COMM_DICT)
 #
 #     print process_unit_page(BASE_URL + NAME_ACCOUNT)
+#     time_to_iso(1368303838)
+
+
     save_data(NAME_ACCOUNT, process_unit_page(BASE_URL + NAME_ACCOUNT))
     pass
 
