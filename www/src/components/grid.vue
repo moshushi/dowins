@@ -2,10 +2,11 @@
 <div class="pure-g">
     <div v-for="item in Grid" class="pure-u-1-5">
         <div class="padded">
-            <div class="image" :style="'background-image: url(img/' + item.filename + ')'">
-                <img :src="placeholder" class="pure-img">
+            <div class="image" :style="'background-image: url(' + item['img-source'] + ')'">
+                <a :href="item.url"><img :src="placeholder" class="pure-img"></a>
             </div>
         </div>
+        <div><small>{{item.text}}</small></div>
     </div>
 </div>
 </template>
