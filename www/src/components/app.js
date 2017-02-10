@@ -31,6 +31,8 @@ function processInstagram(data) {
             monthIds.push(monthId);
             lastMonth = month;
         }
+        item.monthId = monthId;
+        item.id = item.url.split('/')[4];
         images.push(item);
     });
     return {

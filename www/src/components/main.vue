@@ -10,7 +10,8 @@
                 <menu-component :menuData="instagram.menuItems"/>
             </div>
             <div class="pure-u-4-5">
-                <grid-component :gridData="instagram.images" :defaultMonth="instagram.defaultMonth"/>
+                <grid-component v-if="route === 'grid'" :gridData="instagram.images" :defaultMonth="instagram.defaultMonth"/>
+                <cell-component v-if="route === 'cell'" :cellData="instagram.images" :cellId="cellId" />
             </div>
         </div>
 
@@ -20,10 +21,11 @@
 <script>
 var Menu = require('./menu.vue');
 var Grid = require('./grid.vue');
+var Cell = require('./cell.vue');
     
 var main = {
     name: 'main',
-    props: ['instagram'],
+    props: ['instagram', 'cellId'],
     data: function controller() {
         return {
             username: 'test'
@@ -31,7 +33,20 @@ var main = {
     },
     components: {
         'menu-component': Menu,
-        'grid-component': Grid
+        'grid-component': Grid,
+        'cell-component': Cell
+    },
+    computed: {
+        route: function route() {
+            var f = this.$root.currentRoute.replace('#/', '');
+            var r = f.split('/');
+
+            if (r.length > 1) {
+                this.cellId = r[1];
+                return 'cell';
+            }
+            return 'grid'; // default component
+        }
     }
 };
 
