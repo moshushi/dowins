@@ -4,7 +4,7 @@
         <span class="pure-menu-heading" >{{ item.year }}</span>
 
         <ul class="pure-menu-list">
-            <li class="pure-menu-item" v-for="m in item.items">
+            <li v-for="m in item.items" class="pure-menu-item" v-bind:class="{ 'pure-menu-selected': m.id === monthId }">
                 <a :href="m.url" class="pure-menu-link">{{ m.name }}</a>
             </li>
         </ul>
@@ -15,7 +15,7 @@
 <script>
 module.exports = {
     name: 'menu-component',
-    props: ['menuData']
+    props: ['menuData', 'monthId']
 };
 </script>
 

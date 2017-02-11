@@ -22,7 +22,7 @@ var main = {
             }
             var f = this.$root.currentRoute.replace('#/', '');
             var url = f.split('/');
-            if (url.length === 1) {
+            if (url.length === 1 && url[0] !== '') {
                 this.monthId = url[0];
                 return 'grid';
             } else if (url.length > 1) {

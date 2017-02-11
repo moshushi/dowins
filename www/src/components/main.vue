@@ -7,7 +7,7 @@
         </div>
         <div class="pure-g">
             <div class="pure-u-1-5">
-                <menu-component :menuData="instagram.menuItems"/>
+                <menu-component :menuData="instagram.menuItems" :monthId="monthId"/>
             </div>
             <div class="pure-u-4-5">
                 <grid-component v-if="route === 'grid'" :gridData="instagram.images" :monthId="monthId"/>
