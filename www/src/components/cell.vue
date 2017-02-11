@@ -11,7 +11,7 @@
     </div>
     <div class="pure-u-1-2">
         <div class="info">{{item.displayDate}} <div class="divider"></div> &#9829; {{item.likes}}</div>
-        <div class="info">{{item.text}}</div>
+        <div class="info" v-html="item.text"></div>
         <div class="info" v-if="item.comments.length > 0">
             <div class="comment-block">
                 <div class="comment" v-for="c in item.comments">
@@ -81,5 +81,11 @@ module.exports = {
         background-position-y: 50%;
         background-repeat: no-repeat;
         background-size: contain;
+    }
+</style>
+
+<style>
+    .hashtag {
+        color: #CCCCCC;
     }
 </style>

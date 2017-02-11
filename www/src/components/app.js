@@ -46,6 +46,11 @@ function processInstagram(data) {
         }
         item.previousUrl = previousUrl;
         previousUrl = item.currentUrl;
+        // format hashtags
+        item.text = item.text.replace(
+            /(#[^\s]+)/g,
+            '<span class="hashtag">$1</span> '
+        );
         images.push(item);
     });
     return {
