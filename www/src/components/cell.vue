@@ -1,5 +1,5 @@
 <template>
-<div class="pure-g">
+<div class="pure-g" v-if="item">
     <div class="pure-u-3-5">
         <div class="padded">
             <div class="image" :style="'background-image: url(' + item['img-source'] + ')'">
@@ -36,7 +36,7 @@ module.exports = {
                     }
                 )[0];
             }
-            return [];
+            return null;
         }
     }
 };
