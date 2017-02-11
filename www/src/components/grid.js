@@ -1,7 +1,7 @@
 var empty = require('../assets/d.png');
 module.exports = {
     name: 'grid-component',
-    props: ['gridData', 'defaultMonth'],
+    props: ['gridData', 'monthId'],
     data: function controller() {
         return {
             placeholder: empty
@@ -9,13 +9,10 @@ module.exports = {
     },
     computed: {
         Grid: function grid() {
+            var monthId = this.monthId;
             if (typeof this.gridData !== 'undefined' && this.gridData !== null) {
-                var f = this.$root.currentRoute.replace('#/', '');
-                if (f === '') {
-                    f = this.defaultMonth;
-                }
                 return this.gridData.filter(function filter(item) {
-                    return item.date.indexOf(f) !== -1;
+                    return item.date.indexOf(monthId) !== -1;
                 });
             }
             return [];
