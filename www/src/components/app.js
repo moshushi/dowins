@@ -1,4 +1,5 @@
 var Main = require('./main.vue');
+var lib = require('../lib.js');
 var Axios = require('axios');
 
 function processInstagram(data) {
@@ -12,6 +13,7 @@ function processInstagram(data) {
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
     ];
+    var previousUrl = null;
     data.forEach(function iterateArray(item) {
         var itemDate = new Date(item.date);
         var year = itemDate.getFullYear();
@@ -26,13 +28,24 @@ function processInstagram(data) {
         if (month !== lastMonth) {
             menuItems[menuIndex].items.push({
                 name: monthNames[month],
-                id: monthId
+                id: monthId,
+                url: lib.makeUrl(monthId)
             });
             monthIds.push(monthId);
             lastMonth = month;
         }
+        item.displayDate = itemDate.toLocaleString('uk-UA');
         item.monthId = monthId;
         item.id = item.url.split('/')[4];
+        item.currentUrl = lib.makeUrl(item.monthId, item.id);
+        // set previousID of current element and nextID of previous element
+        item.nextUrl = null;
+        if (previousUrl !== null) {
+            // this is not the first image
+            images[images.length - 1].nextUrl = item.currentUrl;
+        }
+        item.previousUrl = previousUrl;
+        previousUrl = item.currentUrl;
         images.push(item);
     });
     return {

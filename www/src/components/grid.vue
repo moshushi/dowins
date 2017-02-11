@@ -3,7 +3,7 @@
     <div v-for="item in Grid" class="pure-u-1-5">
         <div class="padded">
             <div class="image" :style="'background-image: url(' + item['img-source'] + ')'">
-                <a :href="'#/' + item.monthId + '/' + item.id"><img :src="placeholder" class="pure-img"></a>
+                <a :href="item.currentUrl"><img :src="placeholder" class="pure-img"></a>
             </div>
         </div>
     </div>
