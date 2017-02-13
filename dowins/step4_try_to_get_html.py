@@ -9,6 +9,7 @@ NAME_ACCOUNT = u"frenzytechnix"
 QUERY = u'query'
 
 
+# def get_html(url, cookies=None):
 def get_html(url):
     """ Get html from website
     """
@@ -23,15 +24,28 @@ def get_html(url):
 #     return response.text
 #     return response.text
     print response.status_code
-    return response.text
+    return (response.text, response.cookies)
 
 def mod_get_data(html_doc):
 
     soup = BeautifulSoup(html_doc, 'html.parser')
     print soup.prettify().encode('utf-8')
 
+def get_html_more(url, cookies):
+#     response = requests.post(BASE_URL + NAME_ACCOUNT)
+    response = requests.post(url, cookies=cookies)
+    print response.status_code
+#     print response.text.encode('utf-8')
+    return response.text
+
 
 def main():
+    (html, cook) = get_html(BASE_URL + NAME_ACCOUNT)
+    mod_get_data(html)
+    print '=============================='
+    print 'helllo'
+    html2 = get_html_more(u'https://www.instagram.com/query/', cookies = cook)
+    mod_get_data(html2)
     pass
 
 if __name__ == '__main__':
