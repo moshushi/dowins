@@ -26,9 +26,21 @@ def get_csrf_and_cookie_string():
     return response.cookies['csrftoken'], response.headers['set-cookie']
 
 
+def simple_json_get_page(url):
+    """get information from userpage without pagenation
+    """
+    response = requests.get(url+SUF)
+    print response.cookies['csrftoken']
+    print response.text
+    return response.text
+
+
 def main():
     csrftoken, cookie = get_csrf_and_cookie_string()
+    print csrftoken
+    simple_json_get_page(ROOT_URL + NAME_ACCOUNT)
     pass
+
 
 if __name__ == '__main__':
     main()
