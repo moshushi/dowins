@@ -61,16 +61,19 @@ def get_user_info(name, headers):
 #     print ad['page_info']
     return user_id, end_cursor
 
-def some_post(headers):
+def some_post(user_id, end_cursor, headers):
     """
     try to post
     """
-    post_data = {}
+    post_data = {u'q': "ig_user(%s) " % (user_id)
+                }
     r = requests.post(QUERY_URL, data=post_data, headers=headers)
     print '#####'
-    print r.status
-    print r.text
-    print r.headers['csrftoken']
+    print post_data
+#     print end_cursor
+    print r.status_code
+#     print r.text
+#     print r.headers['Set-Cookie']
     pass
 
 def process_page(string):
@@ -83,14 +86,18 @@ def process_page(string):
 def main():
 # We need a CSRF token, so we query Instagram first
     token, cookie = get_csrf_and_cookie_string()
-    print "---"
-    print token
-    print cookie
-    print "-----"
+#     print "---"
+#     print token
+#     print cookie
+#     print "-----"
     h = get_headers(token, cookie)
 #     print h
-    user = get_user_info(NAME_ACCOUNT, h)
-    print user
+#     user_id, cursor = get_user_info(NAME_ACCOUNT, h)
+    user_id, cursor = get_user_info(NAME_ACCOUNT, h)
+    print user_id
+    print cursor
+    some_post(user_id, cursor, h)
+#     some_post(user_id, cursor, h)
 
 
 if __name__ == '__main__':
