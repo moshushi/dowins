@@ -15,11 +15,11 @@ NAME_ACCOUNT = u'sa.ny.aa'
 # NAME_ACCOUNT = u'abc'
 
 
-def get_csrf_and_cookie_string():
+def get_csrf_and_cookie_string(session):
     """get csrf-token and cookie string when first connect to Instagram
     """
     try:
-        response = requests.get(ROOT_URL)
+        response = session.get(ROOT_URL)
     except requests.exceptions.ConnectionError as e:
         print "Site %s isn't accessibility" % BASE_URL
     except requests.exceptions.ReadTimeout as e:
@@ -51,10 +51,10 @@ def get_headers(token=None, cookie=None):
     }
 
 
-def simple_json_get_page(url):
+def simple_json_get_page(url, session):
     """get information from userpage without pagenation
     """
-    response = requests.get(url+SUF)
+    response = session.get(url+SUF)
     print response.cookies['csrftoken']
     print response.text
 #     print response.headers
@@ -62,13 +62,14 @@ def simple_json_get_page(url):
 
 
 def main():
+    s = requests.session()
     start_head = get_headers()
-    csrftoken, cookie = get_csrf_and_cookie_string()
+    csrftoken, cookie = get_csrf_and_cookie_string(s)
     print csrftoken
     head = get_headers(csrftoken, cookie)
     print head
-    simple_json_get_page(ROOT_URL + NAME_ACCOUNT)
-    simple_json_get_page(ROOT_URL + NAME_ACCOUNT)
+    simple_json_get_page(ROOT_URL + NAME_ACCOUNT, s)
+    simple_json_get_page(ROOT_URL + NAME_ACCOUNT, s)
     pass
 
 
