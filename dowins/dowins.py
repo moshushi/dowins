@@ -22,9 +22,9 @@ def get_csrf_and_cookie_string():
     """
     r = requests.head(ROOT_URL)
     print r.status_code
-    print r.cookies['csrftoken']
-    print r.headers['set-cookie']
-    return r.cookies, r.headers
+#     print r.cookies['csrftoken']
+#     print r.headers['set-cookie']
+    return r.cookies['csrftoken'], r.headers['set-cookie']
 
 
 def get_headers(token=None, cookie=None):
@@ -44,6 +44,35 @@ def get_headers(token=None, cookie=None):
         "X-Requested-With": "XMLHttpRequest"
     }
 
+
+def get_user_info(name, headers):
+    r = requests.get(ROOT_URL+name+SUF, headers)
+#     print r.text
+# something wrong!
+#     print r.cookies['csrftoken']
+#     print r.text['user']
+
+    ad = json.loads(r.text)
+#     print json.dumps(ad, indent=4, sort_keys=True)
+#     print ad['user']
+    user_id = ad['user']['id']
+    has_next_page = ad['user']['media']['page_info']['has_next_page']
+    end_cursor = ad['user']['media']['page_info']['end_cursor']
+#     print ad['page_info']
+    return user_id, end_cursor
+
+def some_post(headers):
+    """
+    try to post
+    """
+    post_data = {}
+    r = requests.post(QUERY_URL, data=post_data, headers=headers)
+    print '#####'
+    print r.status
+    print r.text
+    print r.headers['csrftoken']
+    pass
+
 def process_page(string):
     """
     Pretty view result
@@ -54,7 +83,14 @@ def process_page(string):
 def main():
 # We need a CSRF token, so we query Instagram first
     token, cookie = get_csrf_and_cookie_string()
-    pass
+    print "---"
+    print token
+    print cookie
+    print "-----"
+    h = get_headers(token, cookie)
+#     print h
+    user = get_user_info(NAME_ACCOUNT, h)
+    print user
 
 
 if __name__ == '__main__':
