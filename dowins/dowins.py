@@ -10,27 +10,21 @@ https://github.com/tomkdickinson/Instagram-Search-API-Python
 import requests, json, arrow
 
 ROOT_URL = u'https://www.instagram.com/'
+QUERY_URL = u'https://www.instagram.com/query/'
 SUF = u'?__a=1'
 NAME_ACCOUNT = u'sa.ny.aa'
-# NAME_ACCOUNT = u'abc'
 
 
-def get_csrf_and_cookie_string(session):
-    """get csrf-token and cookie string when first connect to Instagram
+
+def get_csrf_and_cookie_string():
     """
-    try:
-        response = session.get(ROOT_URL)
-    except requests.exceptions.ConnectionError as e:
-        print "Site %s isn't accessibility" % BASE_URL
-    except requests.exceptions.ReadTimeout as e:
-        print "Error: Read Timeout"
-    except requests.exceptions.HTTPError as e:
-        print "Get an HTTPError:", e.message
-#     print response.headers
-#     print "-----"
-#     print requests.head
-#     print "-----"
-    return response.cookies['csrftoken'], response.headers['set-cookie']
+    For first connect and return CSRF Token and cookies for next request
+    """
+    r = requests.head(ROOT_URL)
+    print r.status_code
+    print r.cookies['csrftoken']
+    print r.headers['set-cookie']
+    return r.cookies, r.headers
 
 
 def get_headers(token=None, cookie=None):
@@ -50,82 +44,18 @@ def get_headers(token=None, cookie=None):
         "X-Requested-With": "XMLHttpRequest"
     }
 
-
-def simple_json_get_page(url, session):
-    """get information from userpage without pagenation
-    """
-    response = session.get(url+SUF)
-#     print response.cookies['csrftoken']
-#     print response.text
-#     print json.dumps(response.text, indent=4).encode('utf8')
-#     print response.headers
-    return response.text
-
-
-def simple_post(url, session):
-    """get custom information
-    """
-    data = {
-        'q':
-            " page_info {" +
-            " end_cursor," +
-            " has_next_page" +
-            " }",
-        'ref': 'user::show',
-    }
-    resp = session.get(url+SUF)
-#     print resp.cookies['csrftoken']
-#     print json.dumps(resp.text, indent=4)
-    return resp.text
-
-    pass
-
-
-def simple_post_without_session(url):
-    """get custom information
-    """
-    data = {
-        'q':
-            " page_info {" +
-            " end_cursor," +
-            " has_next_page" +
-            " }",
-        'ref': 'user::show',
-    }
-    resp = requests.get(url+SUF)
-#     print resp.cookies['csrftoken']
-#     print json.dumps(resp.text, indent=4)
-    return resp.text
-
-
 def process_page(string):
     """
     Pretty view result
     """
     obj = json.loads(string)
-#     print obj
-    print json.dumps(obj, indent=4)
-
+    print json.dumps(obj, indent=4, sort_keys=True)
 
 def main():
-    s = requests.session()
-    start_head = get_headers()
-    csrftoken, cookie = get_csrf_and_cookie_string(s)
-#     print csrftoken
-#     head = get_headers(csrftoken, cookie)
-#     print head
-    sj = simple_json_get_page(ROOT_URL + NAME_ACCOUNT, s)
-#     simple_json_get_page(ROOT_URL + NAME_ACCOUNT, s)
-#     simple_post(ROOT_URL + NAME_ACCOUNT, s)
-#     simple_post(ROOT_URL + NAME_ACCOUNT, s)
-#     simple_post(ROOT_URL + NAME_ACCOUNT, s)
-    sp = simple_post(ROOT_URL + NAME_ACCOUNT, s)
-#     simple_post_without_session(ROOT_URL + NAME_ACCOUNT)
-    process_page(sj)
-    process_page(sp)
+# We need a CSRF token, so we query Instagram first
+    token, cookie = get_csrf_and_cookie_string()
     pass
 
 
 if __name__ == '__main__':
     main()
-
