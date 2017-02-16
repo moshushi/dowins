@@ -81,6 +81,22 @@ def simple_post(url, session):
     pass
 
 
+def simple_post_without_session(url):
+    """get custom information
+    """
+    data = {
+        'q':
+            " page_info {" +
+            " end_cursor," +
+            " has_next_page" +
+            " }",
+        'ref': 'user::show',
+    }
+    resp = requests.get(url+SUF)
+#     print resp.cookies['csrftoken']
+    print json.dumps(resp.text, indent=4)
+    return resp.text
+
 
 def main():
     s = requests.session()
@@ -91,10 +107,11 @@ def main():
 #     print head
     simple_json_get_page(ROOT_URL + NAME_ACCOUNT, s)
 #     simple_json_get_page(ROOT_URL + NAME_ACCOUNT, s)
+#     simple_post(ROOT_URL + NAME_ACCOUNT, s)
+#     simple_post(ROOT_URL + NAME_ACCOUNT, s)
+#     simple_post(ROOT_URL + NAME_ACCOUNT, s)
     simple_post(ROOT_URL + NAME_ACCOUNT, s)
-    simple_post(ROOT_URL + NAME_ACCOUNT, s)
-    simple_post(ROOT_URL + NAME_ACCOUNT, s)
-    simple_post(ROOT_URL + NAME_ACCOUNT, s)
+    simple_post_without_session(ROOT_URL + NAME_ACCOUNT)
     pass
 
 
