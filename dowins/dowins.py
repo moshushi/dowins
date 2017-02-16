@@ -5,6 +5,7 @@ Prototype
 version 0.02
 Based on: Instagram-Search-API-Python by TomKDickinson
 https://github.com/tomkdickinson/Instagram-Search-API-Python
+http://tomkdickinson.co.uk/2016/12/extracting-instagram-data-part-1/
 """
 
 import requests, json, arrow
@@ -65,8 +66,15 @@ def some_post(user_id, end_cursor, headers):
     """
     try to post
     """
-    post_data = {u'q': "ig_user(%s) " % (user_id)
+    post_data = {u'q': "ig_user(%s) " % (user_id) +
+                 "{media.after(" + end_cursor + ", 12){" +
+                 "count, " +
+                 "page_info"+
+                 "}"
+                 "}",
+                 u'ref': "users::show"
                 }
+
     r = requests.post(QUERY_URL, data=post_data, headers=headers)
     print '#####'
     print post_data
