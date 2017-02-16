@@ -57,7 +57,7 @@ def simple_json_get_page(url, session):
     response = session.get(url+SUF)
 #     print response.cookies['csrftoken']
 #     print response.text
-    print json.dumps(response.text, indent=4).encode('utf8')
+#     print json.dumps(response.text, indent=4).encode('utf8')
 #     print response.headers
     return response.text
 
@@ -75,7 +75,7 @@ def simple_post(url, session):
     }
     resp = session.get(url+SUF)
 #     print resp.cookies['csrftoken']
-    print json.dumps(resp.text, indent=4)
+#     print json.dumps(resp.text, indent=4)
     return resp.text
 
     pass
@@ -94,8 +94,17 @@ def simple_post_without_session(url):
     }
     resp = requests.get(url+SUF)
 #     print resp.cookies['csrftoken']
-    print json.dumps(resp.text, indent=4)
+#     print json.dumps(resp.text, indent=4)
     return resp.text
+
+
+def process_page(string):
+    """
+    Pretty view result
+    """
+    obj = json.loads(string)
+#     print obj
+    print json.dumps(obj, indent=4)
 
 
 def main():
@@ -105,13 +114,15 @@ def main():
 #     print csrftoken
 #     head = get_headers(csrftoken, cookie)
 #     print head
-    simple_json_get_page(ROOT_URL + NAME_ACCOUNT, s)
+    sj = simple_json_get_page(ROOT_URL + NAME_ACCOUNT, s)
 #     simple_json_get_page(ROOT_URL + NAME_ACCOUNT, s)
 #     simple_post(ROOT_URL + NAME_ACCOUNT, s)
 #     simple_post(ROOT_URL + NAME_ACCOUNT, s)
 #     simple_post(ROOT_URL + NAME_ACCOUNT, s)
-    simple_post(ROOT_URL + NAME_ACCOUNT, s)
-    simple_post_without_session(ROOT_URL + NAME_ACCOUNT)
+    sp = simple_post(ROOT_URL + NAME_ACCOUNT, s)
+#     simple_post_without_session(ROOT_URL + NAME_ACCOUNT)
+    process_page(sj)
+    process_page(sp)
     pass
 
 
