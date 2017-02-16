@@ -3,7 +3,7 @@
 Script downloads and wrap foto and metainformation from INSTARGAM
 Prototype
 version 0.02
-Used example:
+Based on: Instagram-Search-API-Python by TomKDickinson
 https://github.com/tomkdickinson/Instagram-Search-API-Python
 """
 
@@ -55,21 +55,46 @@ def simple_json_get_page(url, session):
     """get information from userpage without pagenation
     """
     response = session.get(url+SUF)
-    print response.cookies['csrftoken']
-    print response.text
+#     print response.cookies['csrftoken']
+#     print response.text
+    print json.dumps(response.text, indent=4).encode('utf8')
 #     print response.headers
     return response.text
+
+
+def simple_post(url, session):
+    """get custom information
+    """
+    data = {
+        'q':
+            " page_info {" +
+            " end_cursor," +
+            " has_next_page" +
+            " }",
+        'ref': 'user::show',
+    }
+    resp = session.get(url+SUF)
+#     print resp.cookies['csrftoken']
+    print json.dumps(resp.text, indent=4)
+    return resp.text
+
+    pass
+
 
 
 def main():
     s = requests.session()
     start_head = get_headers()
     csrftoken, cookie = get_csrf_and_cookie_string(s)
-    print csrftoken
-    head = get_headers(csrftoken, cookie)
-    print head
+#     print csrftoken
+#     head = get_headers(csrftoken, cookie)
+#     print head
     simple_json_get_page(ROOT_URL + NAME_ACCOUNT, s)
-    simple_json_get_page(ROOT_URL + NAME_ACCOUNT, s)
+#     simple_json_get_page(ROOT_URL + NAME_ACCOUNT, s)
+    simple_post(ROOT_URL + NAME_ACCOUNT, s)
+    simple_post(ROOT_URL + NAME_ACCOUNT, s)
+    simple_post(ROOT_URL + NAME_ACCOUNT, s)
+    simple_post(ROOT_URL + NAME_ACCOUNT, s)
     pass
 
 
