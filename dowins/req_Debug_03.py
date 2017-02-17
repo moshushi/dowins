@@ -36,6 +36,13 @@ def pretty_print_POST(req):
     ))
 
 
+def show_request_headers(response):
+    """
+    Show request headers, what we send to server
+    """
+    return response.request.headers
+
+
 def pretty_print_result(string):
     """
     Pretty view result
@@ -78,12 +85,10 @@ def main():
     a = requests.get(NAME_URL)
 #     print get_csrf_and_cookie_string(a)
     print a.status_code
-    print get_cursor(a)
-    print has_next_page(a)
-    pretty_print_result(a.text)
-#     print a.text.encode('utf8')
-#     pretty_print_POST(a)
+#     print get_cursor(a)
+#     print has_next_page(a)
 #     pretty_print_result(a.text)
+    print show_request_headers(a)
 
 
 
