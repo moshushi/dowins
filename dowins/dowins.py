@@ -66,20 +66,35 @@ def some_post(user_id, end_cursor, headers):
     """
     try to post
     """
-    post_data = {u'q': "ig_user(%s) " % (user_id) +
+    post_data = {'q': "ig_user(%s) " % (user_id) +
                  "{media.after(" + end_cursor + ", 12){" +
-                 "count, " +
-                 "page_info"+
-                 "}"
-                 "}",
-                 u'ref': "users::show"
+                "  count," +
+                "  nodes {" +
+                "    id," +
+                "    is_verified," +
+                "    followed_by_viewer," +
+                "    requested_by_viewer," +
+                "    full_name," +
+                "    profile_pic_url," +
+                "    username" +
+                "  }," +
+                "  page_info {" +
+                "    end_cursor," +
+                "    has_next_page" +
+                "  }" +
+                "}" +
+                " }",
+                 'ref': "users::show"
                 }
 
-    r = requests.post(QUERY_URL, data=post_data, headers=headers)
+#     r = requests.post(QUERY_URL, data=post_data, headers=headers)
+#     r = requests.post(QUERY_URL, data=json.dumps(post_data), headers=headers)
+    r = requests.post(QUERY_URL, json=post_data, headers=headers)
     print '#####'
     print post_data
 #     print end_cursor
     print r.status_code
+    print r.history
 #     print r.text
 #     print r.headers['Set-Cookie']
     pass
