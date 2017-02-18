@@ -80,15 +80,57 @@ def has_next_page(response):
     return json.loads(response.text)['user']['media']['page_info']['has_next_page']
 
 
+def make_headers(token):
+    """
+    make correct headers
+    """
+    headers = {
+        'accept': '*/*',
+        'accept-encoding': 'gzip, deflare, br',
+        'accept-language': 'en-US,en;q=0.8',
+        'cache-control': 'no-cache',
+        'content-type': 'application/x-www-form-urlencoded',
+        'origin': 'https://www.instagram.com',
+        'referer': 'https://www.instagram.com/sa.ny.aa/',
+        'pragma': 'no-cache',
+        'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) '
+        'AppleWebKit/537.36 (KHTML, like Gecko) '
+        'Chrome/56.0.2924.87 Safari/537.36',
+        'x-csrftoken': token,
+        'x-instagram-ajax': '1',
+        'x-requested-with': 'XMLHttpRequest'
+    }
+    return headers
+
 def main():
 #     start_logging()
-    a = requests.get(NAME_URL)
+        with requests.Session() as s:
+            a = s.get(NAME_URL)
+            print a.cookies
+            csrf_token = get_csrf_and_cookie_string(a)[0]
+#             print csrf_token
+            head = make_headers(csrf_token)
+            print head
+            s.headers.update(head)
+            a = s.get(NAME_URL)
+
+            print a.status_code
+#             print json.loads(show_request_headers(a))
+            print show_request_headers(a)
+#             print type(show_request_headers(a))
+#             print type(show_request_headers(a)['Accept'])
+#             print show_request_headers(a)['Accept']
+
+#             print '----'
+#             print a.text
+
+#     a = requests.get(NAME_URL)
 #     print get_csrf_and_cookie_string(a)
-    print a.status_code
+#     print a.status_code
 #     print get_cursor(a)
 #     print has_next_page(a)
 #     pretty_print_result(a.text)
-    print show_request_headers(a)
+#     print show_request_headers(a)
     #### loading_page_id $$$$
 
 
