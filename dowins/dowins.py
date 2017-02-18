@@ -199,6 +199,71 @@ def workin_insta(url):
     return text
 
 
+def make_post_data_comm(user_id, cursor, counter):
+    """
+    Make correct dictonary query for post_data
+    """
+    ### develop
+    short_code = u'BQplF2Chs57'
+    counter = u'50'
+
+    dict_post = {'q': "ig_shortcode(" + short_code + ") { media.after(" +
+                 cursor + ", " + counter + ") {" +
+    "nodes {" +
+    "  caption," +
+    "  code," +
+    "  comments {" +
+    "    count" +
+    "  }," +
+    "  date," +
+    "  display_src," +
+    "  is_video," +
+    "  likes {" +
+    "    count" +
+    "  }," +
+    "  video_views" +
+    "}," +
+    "page_info" +
+    "}" +
+    " }"
+                 }
+    dict_post.update({'ref': 'media::show'})
+    return dict_post
+
+
+def get_post_comment(url):
+    """
+    Make post request and get Full comment
+    need return list of ['nodes']
+    """
+    print 'Need list of comment use post requests'
+    with requests.Session() as s:
+        a = s.get(url)
+        csrf_token, cookie = get_csrf_and_cookie_string(a)
+#         username = get_username(a)
+#         head = make_headers(csrf_token, cookie, username)
+        username = url + '/?taken-by=' + NAME
+        head = make_headers(csrf_token, cookie, username)
+
+#         s.headers.update(head)
+#         print a.text
+########################################################################
+
+#         user_id = get_user_id(a)
+#         cursor = get_cursor(a)
+#         counter = get_count_row(a)
+#         #### Delete next row for production
+#         counter = '20'
+#         post_data = make_post_data(user_id, cursor, counter)
+#         p = s.post(QUERY_URL, data=post_data)
+# #         print p.status_code
+# #         print type(p.status_code)
+# #         print p.text
+#         return p.text, p.status_code
+########################################################################
+    pass
+
+
 def get_raw_comments_from_page(url):
     """
     Get comments from post-foto
@@ -230,6 +295,7 @@ def get_raw_comments_from_page(url):
         return row_li
 #     else:
     print 'need more extended getting comment'
+    row_li = get_post_comment(url)
     print row_li
     return row_li
 #     print row_li
@@ -319,8 +385,9 @@ def main():
 #     l = workin_insta(ROOT_URL + NAME + SUF)
 #     remake_main_data(l)
 #     remake_main_data('l')
-    get_comments_from_page('aa')
+#     get_comments_from_page('aa')
 #     remake_comm('a')
+    get_post_comment(u'https://www.instagram.com/p/BPSRWn3Abpe')
 
 
 
