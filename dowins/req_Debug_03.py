@@ -85,7 +85,7 @@ def has_next_page(response):
     return json.loads(response.text)['user']['media']['page_info']['has_next_page']
 
 
-def make_headers(token, username):
+def make_headers(token, cookie, username):
     """
     make correct headers
     """
@@ -95,6 +95,7 @@ def make_headers(token, username):
         'accept-language': 'en-US,en;q=0.8',
         'cache-control': 'no-cache',
         'content-type': 'application/x-www-form-urlencoded',
+        'cookie': cookie,
         'origin': 'https://www.instagram.com',
         'referer': 'https://www.instagram.com/' + username +'/',
         'pragma': 'no-cache',
@@ -107,6 +108,13 @@ def make_headers(token, username):
     }
     return headers
 
+
+def post_req():
+    """
+    Make post request
+    """
+    pass
+
 def main():
 #     start_logging()
         with requests.Session() as s:
@@ -114,17 +122,30 @@ def main():
             print a.cookies
             csrf_token = get_csrf_and_cookie_string(a)[0]
 #             print csrf_token
+            cookie = get_csrf_and_cookie_string(a)[1]
             username = get_username(a)
-            head = make_headers(csrf_token, username)
+            head = make_headers(csrf_token, cookie, username)
             print head
             s.headers.update(head)
-            a = s.get(NAME_URL)
 
+#             a = s.get(NAME_URL)
+            a = s.get(NAME_URL)
             print a.status_code
+            print show_request_headers(a)
+            print show_request_headers(a)['Cookie']
+            print '---'
+
+#             p = s.post('https://www.instagram.com/query/', data={}, cookies=a.cookies)
+            p = s.post('https://www.instagram.com/query/', data={})
+            print p.status_code
+            print show_request_headers(p)
+            print show_request_headers(p)['user-agent']
+            print show_request_headers(p)['Cookie']
+
 #             print json.loads(show_request_headers(a))
 #             print show_request_headers(a)
-            print get_username(a)
-            pretty_print_result(a.text)
+#             print get_username(a)
+#             pretty_print_result(a.text)
 #             print type(show_request_headers(a))
 #             print type(show_request_headers(a)['Accept'])
 #             print show_request_headers(a)['Accept']
