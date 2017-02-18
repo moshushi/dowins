@@ -6,6 +6,7 @@ with correct post.query
 import requests
 import logging
 import json
+import time
 
 NAME_URL = 'https://instagram.com/sa.ny.aa/?__a=1'
 
@@ -147,13 +148,14 @@ def make_post_data(user_id, cursor, counter):
 
 
 
-def post_req():
+def get_post_resp():
     """
     Make post request
     """
     pass
 
-def main():
+
+def get_full_response_from_post():
 #     start_logging()
         with requests.Session() as s:
             a = s.get(NAME_URL)
@@ -186,31 +188,39 @@ def main():
             ### temporary for developing
             counter = '2'
 
-            post_data = make_post_data(user_id, cursor, counter)
-            p = s.post('https://www.instagram.com/query/', data=post_data)
+            status_semaphor = 100
+            i = 0
+            while status_semaphor != 200 and i<= 10:
+                i += 1
+                print i
+                post_data = make_post_data(user_id, cursor, counter)
+                p = s.post('https://www.instagram.com/query/', data=post_data)
 #             p = s.post('https://www.instagram.com/query/?__a=1', data=post_data)
 #             new_cursor = get_cursor(p)
-            print p.status_code
+                print p.status_code
+                status_semaphor = int(p.status_code)
+                print type(p.status_code)
 #             pretty_print_result(p.text)
 #             print show_request_headers(p)
 #             print show_request_headers(p)['user-agent']
 #             print show_request_headers(p)['Cookie']
-            print '-----'
-            print a.text
-            print '****'
-            print get_count_row(a)
-            print type(get_count_row(a))
-            print '****'
-            print len(p.text)
-            print p.text
-            print type(p.text)
+                print '-----'
+#                 print a.text
+                print '****'
+                print get_count_row(a)
+                print type(get_count_row(a))
+                print '****'
+                print len(p.text)
+                print p.text
+                print type(p.text)
 #             print json.loads(p.text)
-            print '====='
+                print '====='
 #             cursor = get_cursor(p)
 #             post_data = make_post_data(user_id, cursor)
 #             p2 = s.post('https://www.instagram.com/query/', data=post_data)
-            print '====='
-#             print a.text
+                print '====='
+                time.sleep(5)
+    #             print a.text
 #             pretty_print_POST(p)
 
 #             print json.loads(show_request_headers(a))
@@ -233,6 +243,8 @@ def main():
 #     print show_request_headers(a)
     #### loading_page_id $$$$
 
+def main():
+    get_full_response_from_post()
 
 
 if __name__ == '__main__':

@@ -1,126 +1,192 @@
 # -*- encoding: utf-8 -*-
 """
-Script downloads and wrap foto and metainformation from INSTARGAM
-Prototype
-version 0.02
-Based on: Instagram-Search-API-Python by TomKDickinson
-https://github.com/tomkdickinson/Instagram-Search-API-Python
-http://tomkdickinson.co.uk/2016/12/extracting-instagram-data-part-1/
+with correct post.query
 """
 
-import requests, json, arrow
+import requests
+import logging
+import json
+import time
 
-ROOT_URL = u'https://www.instagram.com/'
-QUERY_URL = u'https://www.instagram.com/query/'
-SUF = u'?__a=1'
-NAME_ACCOUNT = u'sa.ny.aa'
+NAME_URL = 'https://instagram.com/sa.ny.aa/?__a=1'
 
 
-
-def get_csrf_and_cookie_string():
+def start_logging():
     """
-    For first connect and return CSRF Token and cookies for next request
+    Function for starting http logging
     """
-    r = requests.head(ROOT_URL)
-    print r.status_code
-#     print r.cookies['csrftoken']
-#     print r.headers['set-cookie']
-    return r.cookies['csrftoken'], r.headers['set-cookie']
+    try:
+        import http.client as http_client
+    except ImportError:
+        # Python 2
+        import httplib as http_client
+    http_client.HTTPConnection.debuglevel = 1
 
 
-def get_headers(token=None, cookie=None):
-    """Make useable headers for extractor
+def pretty_print_POST(req):
     """
-    return {
-        "accept": "application/json, text/javascript, */*; q=0.01",
-        "Accept-Language": "en-GB,en;q=0.8,en-US;q=0.6",
-        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        "cookie": cookie,
-        "origin": "https://www.instagram.com",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                        "AppleWebKit/537.36 (KHTML, like Gecko) "
-                        "Chrome/56.0.2924.87 Safari/537.36",
-        "x-csrftoken": token,
-        "x-instagram-ajax": "1",
-        "X-Requested-With": "XMLHttpRequest"
-    }
+    At this point it is completely built and ready
+    to be fired; it is "prepared".
 
-
-def get_user_info(name, headers):
-    r = requests.get(ROOT_URL+name+SUF, headers)
-#     print r.text
-# something wrong!
-#     print r.cookies['csrftoken']
-#     print r.text['user']
-
-    ad = json.loads(r.text)
-#     print json.dumps(ad, indent=4, sort_keys=True)
-#     print ad['user']
-    user_id = ad['user']['id']
-    has_next_page = ad['user']['media']['page_info']['has_next_page']
-    end_cursor = ad['user']['media']['page_info']['end_cursor']
-#     print ad['page_info']
-    return user_id, end_cursor
-
-def some_post(user_id, end_cursor, headers):
+    However pay attention at the formatting used in
+    this function because it is programmed to be pretty
+    printed and may differ from the actual request.
     """
-    try to post
+    print('{}\n{}\n{}\n\n{}'.format(
+        '-----------START-----------',
+        req.method + ' ' + req.url,
+        '\n'.join('{}: {}'.format(k, v) for k, v in req.headers.items()),
+        req.body,
+    ))
+
+
+def show_request_headers(response):
     """
-    post_data = {'q': "ig_user(%s) " % (user_id) +
-                 "{media.after(" + end_cursor + ", 12){" +
-                "  count," +
-                "  nodes {" +
-                "    id," +
-                "    is_verified," +
-                "    followed_by_viewer," +
-                "    requested_by_viewer," +
-                "    full_name," +
-                "    profile_pic_url," +
-                "    username" +
-                "  }," +
-                "  page_info {" +
-                "    end_cursor," +
-                "    has_next_page" +
-                "  }" +
-                "}" +
-                " }",
-                 'ref': "users::show"
-                }
+    Show request headers, what we send to server
+    """
+    return response.request.headers
 
-#     r = requests.post(QUERY_URL, data=post_data, headers=headers)
-#     r = requests.post(QUERY_URL, data=json.dumps(post_data), headers=headers)
-    r = requests.post(QUERY_URL, json=post_data, headers=headers)
-    print '#####'
-    print post_data
-#     print end_cursor
-    print r.status_code
-    print r.history
-#     print r.text
-#     print r.headers['Set-Cookie']
-    pass
 
-def process_page(string):
+def pretty_print_result(string):
     """
     Pretty view result
     """
     obj = json.loads(string)
     print json.dumps(obj, indent=4, sort_keys=True)
 
+
+def get_csrf_and_cookie_string(response):
+    """
+    get CSRF-Token and cookie_string from response
+    """
+    return response.cookies['csrftoken'], response.headers['set-cookie']
+
+
+def get_user_id(response):
+    """
+    get user_id from json-string response-object
+    """
+    return json.loads(response.text)['user']['id']
+
+
+def get_cursor(response):
+    """
+    get cursor from json-string response-object
+    """
+    return json.loads(response.text)['user']['media']['page_info']['end_cursor']
+
+
+def get_count_row(response):
+    """
+    get all sum of post for downloads
+    """
+    return str(json.loads(response.text)['user']['media']['count'])
+
+
+def get_username(response):
+    """
+    get username from response
+    """
+    return json.loads(response.text)['user']['username']
+
+
+def has_next_page(response):
+    """
+    has next page from json-string response-object
+    """
+    return json.loads(response.text)['user']['media']['page_info']['has_next_page']
+
+
+def make_headers(token, cookie, username):
+    """
+    make correct headers
+    """
+    headers = {
+        'accept': '*/*',
+        'accept-encoding': 'gzip, deflare, br',
+        'accept-language': 'en-US,en;q=0.8',
+        'cache-control': 'no-cache',
+        'content-type': 'application/x-www-form-urlencoded',
+        'cookie': cookie,
+        'origin': 'https://www.instagram.com',
+        'referer': 'https://www.instagram.com/' + username +'/',
+        'pragma': 'no-cache',
+        'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) '
+        'AppleWebKit/537.36 (KHTML, like Gecko) '
+        'Chrome/56.0.2924.87 Safari/537.36',
+        'x-csrftoken': token,
+        'x-instagram-ajax': '1',
+        'x-requested-with': 'XMLHttpRequest'
+    }
+    return headers
+
+
+def make_post_data(user_id, cursor, counter):
+    """
+    Make correct dictonary query for post_data
+    """
+    dict_post = {'q': "ig_user(" + user_id + ") { media.after(" +
+                 cursor + ", " + counter + ") {" +
+    "nodes {" +
+    "  caption," +
+    "  code," +
+    "  comments {" +
+    "    count" +
+    "  }," +
+    "  date," +
+    "  display_src," +
+    "  is_video," +
+    "  likes {" +
+    "    count" +
+    "  }," +
+    "  video_views" +
+    "}," +
+    "page_info" +
+    "}" +
+    " }"
+                 }
+    dict_post.update({'ref': 'users::show'})
+    return dict_post
+
+
+def get_post_resp():
+    """
+    Make post request and get
+    """
+    with requests.Session() as s:
+        a = s.get(NAME_URL)
+        csrf_token, cookie = get_csrf_and_cookie_string(a)
+        username = get_username(a)
+        head = make_headers(csrf_token, cookie, username)
+        s.headers.update(head)
+        user_id = get_user_id(a)
+        cursor = get_cursor(a)
+        counter = get_count_row(a)
+        counter = '2'
+        post_data = make_post_data(user_id, cursor, counter)
+        p = s.post('https://www.instagram.com/query/', data=post_data)
+        print p.status_code
+#         print p.text
+        return p.text
+    pass
+
+
 def main():
-# We need a CSRF token, so we query Instagram first
-    token, cookie = get_csrf_and_cookie_string()
-#     print "---"
-#     print token
-#     print cookie
-#     print "-----"
-    h = get_headers(token, cookie)
-#     print h
-#     user_id, cursor = get_user_info(NAME_ACCOUNT, h)
-    user_id, cursor = get_user_info(NAME_ACCOUNT, h)
-    print user_id
-    print cursor
-    some_post(user_id, cursor, h)
-#     some_post(user_id, cursor, h)
+    print get_post_resp()
+    pass
+
+def main_old():
+#     start_logging()
+            status_semaphor = 100
+            i = 0
+            while status_semaphor != 200 and i<= 10:
+                i += 1
+                print i
+                post_data = make_post_data(user_id, cursor, counter)
+                p = s.post('https://www.instagram.com/query/', data=post_data)
+                print p.status_code
+                status_semaphor = int(p.status_code)
+                time.sleep(5)
 
 
 if __name__ == '__main__':
