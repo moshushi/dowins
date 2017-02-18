@@ -72,6 +72,11 @@ def get_cursor(response):
     return json.loads(response.text)['user']['media']['page_info']['end_cursor']
 
 
+def get_username(response):
+    """
+    get username from response
+    """
+    return json.loads(response.text)['user']['username']
 
 def has_next_page(response):
     """
@@ -80,7 +85,7 @@ def has_next_page(response):
     return json.loads(response.text)['user']['media']['page_info']['has_next_page']
 
 
-def make_headers(token):
+def make_headers(token, username):
     """
     make correct headers
     """
@@ -91,7 +96,7 @@ def make_headers(token):
         'cache-control': 'no-cache',
         'content-type': 'application/x-www-form-urlencoded',
         'origin': 'https://www.instagram.com',
-        'referer': 'https://www.instagram.com/sa.ny.aa/',
+        'referer': 'https://www.instagram.com/' + username +'/',
         'pragma': 'no-cache',
         'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) '
         'AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -109,14 +114,17 @@ def main():
             print a.cookies
             csrf_token = get_csrf_and_cookie_string(a)[0]
 #             print csrf_token
-            head = make_headers(csrf_token)
+            username = get_username(a)
+            head = make_headers(csrf_token, username)
             print head
             s.headers.update(head)
             a = s.get(NAME_URL)
 
             print a.status_code
 #             print json.loads(show_request_headers(a))
-            print show_request_headers(a)
+#             print show_request_headers(a)
+            print get_username(a)
+            pretty_print_result(a.text)
 #             print type(show_request_headers(a))
 #             print type(show_request_headers(a)['Accept'])
 #             print show_request_headers(a)['Accept']
