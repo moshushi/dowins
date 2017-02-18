@@ -1,4 +1,7 @@
 # -*- encoding: utf-8 -*-
+"""
+with correct post.query
+"""
 
 import requests
 import logging
@@ -116,28 +119,17 @@ def make_post_data(user_id, cursor):
     dict_post = {'q': "ig_user(" + user_id + ") { media.after(" + cursor + ", 12) {" +
     "count," +
     "nodes {" +
-    "  __typename," +
     "  caption," +
     "  code," +
     "  comments {" +
     "    count" +
     "  }," +
-    "  comments_disabled," +
     "  date," +
-    "  dimensions {" +
-    "    height," +
-    "    width" +
-    "  }," +
     "  display_src," +
-    "  id," +
     "  is_video," +
     "  likes {" +
     "    count" +
     "  }," +
-    "  owner {" +
-    "    id" +
-    "  }," +
-    "  thumbnail_src," +
     "  video_views" +
     "}," +
     "page_info" +
@@ -195,6 +187,7 @@ def main():
             print '-----'
 #             print a.text
             print '****'
+            print len(p.text)
             print p.text
             print type(p.text)
 #             print json.loads(p.text)
