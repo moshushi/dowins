@@ -8,7 +8,11 @@ import logging
 import json
 import time
 
-NAME_URL = 'https://instagram.com/sa.ny.aa/?__a=1'
+ROOT_URL= u'https://www.instagram.com/'
+NAME = u'sa.ny.aa'
+SUF = u'/?__a=1'
+QUERY_URL = u'https://www.instagram.com/query/'
+# NAME_URL = 'https://instagram.com/sa.ny.aa/?__a=1'
 
 
 def start_logging():
@@ -108,8 +112,8 @@ def make_headers(token, cookie, username):
         'cache-control': 'no-cache',
         'content-type': 'application/x-www-form-urlencoded',
         'cookie': cookie,
-        'origin': 'https://www.instagram.com',
-        'referer': 'https://www.instagram.com/' + username +'/',
+        'origin': ROOT_URL,
+        'referer': ROOT_URL + username +'/',
         'pragma': 'no-cache',
         'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) '
         'AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -149,12 +153,12 @@ def make_post_data(user_id, cursor, counter):
     return dict_post
 
 
-def get_post_resp():
+def get_post_resp(url):
     """
     Make post request and get
     """
     with requests.Session() as s:
-        a = s.get(NAME_URL)
+        a = s.get(url)
         csrf_token, cookie = get_csrf_and_cookie_string(a)
         username = get_username(a)
         head = make_headers(csrf_token, cookie, username)
@@ -162,31 +166,33 @@ def get_post_resp():
         user_id = get_user_id(a)
         cursor = get_cursor(a)
         counter = get_count_row(a)
+        #### Delete next row for production
         counter = '2'
         post_data = make_post_data(user_id, cursor, counter)
-        p = s.post('https://www.instagram.com/query/', data=post_data)
-        print p.status_code
+        p = s.post(QUERY_URL, data=post_data)
+#         print p.status_code
+#         print type(p.status_code)
 #         print p.text
-        return p.text
+        return p.text, p.status_code
     pass
 
+
+def workin_insta(url):
+    """
+    Try 10 time to get info, if not - print number http error
+    """
+    semaphor = 100
+    i = 10
+    while semaphor != 200 and i > 0:
+        text, semaphor = get_post_resp(url)
+        print semaphor
+        i -=1
+#     print text
+    return text
 
 def main():
-    print get_post_resp()
-    pass
+    print workin_insta(ROOT_URL + NAME + SUF)
 
-def main_old():
-#     start_logging()
-            status_semaphor = 100
-            i = 0
-            while status_semaphor != 200 and i<= 10:
-                i += 1
-                print i
-                post_data = make_post_data(user_id, cursor, counter)
-                p = s.post('https://www.instagram.com/query/', data=post_data)
-                print p.status_code
-                status_semaphor = int(p.status_code)
-                time.sleep(5)
 
 
 if __name__ == '__main__':
