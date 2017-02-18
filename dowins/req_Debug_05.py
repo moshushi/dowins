@@ -75,6 +75,12 @@ def get_cursor(response):
     return json.loads(response.text)['user']['media']['page_info']['end_cursor']
 
 
+def get_count_row(response):
+    """
+    get all sum of post for downloads
+    """
+    return str(json.loads(response.text)['user']['media']['count'])
+
 def get_username(response):
     """
     get username from response
@@ -112,12 +118,12 @@ def make_headers(token, cookie, username):
     return headers
 
 
-def make_post_data(user_id, cursor):
+def make_post_data(user_id, cursor, counter):
     """
     Make correct dictonary query for post_data
     """
-    dict_post = {'q': "ig_user(" + user_id + ") { media.after(" + cursor + ", 12) {" +
-    "count," +
+    dict_post = {'q': "ig_user(" + user_id + ") { media.after(" +
+                 cursor + ", " + counter + ") {" +
     "nodes {" +
     "  caption," +
     "  code," +
@@ -175,7 +181,12 @@ def main():
             user_id = get_user_id(a)
             cursor = get_cursor(a)
             print cursor
-            post_data = make_post_data(user_id, cursor)
+
+            counter = get_count_row(a)
+            ### temporary for developing
+            counter = '2'
+
+            post_data = make_post_data(user_id, cursor, counter)
             p = s.post('https://www.instagram.com/query/', data=post_data)
 #             p = s.post('https://www.instagram.com/query/?__a=1', data=post_data)
 #             new_cursor = get_cursor(p)
@@ -185,7 +196,10 @@ def main():
 #             print show_request_headers(p)['user-agent']
 #             print show_request_headers(p)['Cookie']
             print '-----'
-#             print a.text
+            print a.text
+            print '****'
+            print get_count_row(a)
+            print type(get_count_row(a))
             print '****'
             print len(p.text)
             print p.text
