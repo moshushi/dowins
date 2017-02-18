@@ -109,6 +109,46 @@ def make_headers(token, cookie, username):
     return headers
 
 
+def make_post_data(user_id, cursor):
+    """
+    Make correct dictonary query for post_data
+    """
+    dict_post = {'q': "ig_user(" + user_id + ") { media.after(" + cursor + ", 12) {" +
+    "count," +
+    "nodes {" +
+    "  __typename," +
+    "  caption," +
+    "  code," +
+    "  comments {" +
+    "    count" +
+    "  }," +
+    "  comments_disabled," +
+    "  date," +
+    "  dimensions {" +
+    "    height," +
+    "    width" +
+    "  }," +
+    "  display_src," +
+    "  id," +
+    "  is_video," +
+    "  likes {" +
+    "    count" +
+    "  }," +
+    "  owner {" +
+    "    id" +
+    "  }," +
+    "  thumbnail_src," +
+    "  video_views" +
+    "}," +
+    "page_info" +
+    "}" +
+    " }"
+                 }
+    dict_post.update({'ref': 'users::show'})
+    return dict_post
+
+
+
 def post_req():
     """
     Make post request
@@ -136,11 +176,29 @@ def main():
             print '---'
 
 #             p = s.post('https://www.instagram.com/query/', data={}, cookies=a.cookies)
-            p = s.post('https://www.instagram.com/query/', data={})
+#             p = s.post('https://www.instagram.com/query/', data={})
+#             re_p = requests.Request('POST', 'https://www.instagram.com/query/', data={})
+#             re_ps = re_p.prepare()
+#             p = s.send(re_ps)
+            user_id = get_user_id(a)
+            cursor = get_cursor(a)
+            print cursor
+            post_data = make_post_data(user_id, cursor)
+            p = s.post('https://www.instagram.com/query/', data=post_data)
             print p.status_code
-            print show_request_headers(p)
-            print show_request_headers(p)['user-agent']
-            print show_request_headers(p)['Cookie']
+#             pretty_print_result(p.text)
+#             print show_request_headers(p)
+#             print show_request_headers(p)['user-agent']
+#             print show_request_headers(p)['Cookie']
+            print '-----'
+            print p.text
+            print '====='
+#             cursor = get_cursor(p)
+#             post_data = make_post_data(user_id, cursor)
+#             p2 = s.post('https://www.instagram.com/query/', data=post_data)
+            print '====='
+#             print a.text
+#             pretty_print_POST(p)
 
 #             print json.loads(show_request_headers(a))
 #             print show_request_headers(a)
@@ -158,7 +216,7 @@ def main():
 #     print a.status_code
 #     print get_cursor(a)
 #     print has_next_page(a)
-#     pretty_print_result(a.text)
+#         pretty_print_result(a.text)
 #     print show_request_headers(a)
     #### loading_page_id $$$$
 
