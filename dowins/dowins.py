@@ -354,7 +354,7 @@ def get_raw_comments_from_page(url):
         return row_li
 #     else:
 #     print 'need more extended getting comment'
-    print ':'
+    print ':',
     # Next string uncomment for continue developing
 #     row_li = get_post_comment(url)
 #     print row_li
