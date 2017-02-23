@@ -2,7 +2,7 @@
 """
 Script downloads and wrap foto and metainformation from INSTARGAM
 Prototype
-version 0.03
+version 0.04
 Based on: Instagram-Search-API-Python by TomKDickinson
 https://github.com/tomkdickinson/Instagram-Search-API-Python
 http://tomkdickinson.co.uk/2016/12/extracting-instagram-data-part-1/
