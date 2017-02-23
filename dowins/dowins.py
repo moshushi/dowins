@@ -239,9 +239,11 @@ def get_post_comment(url):
         csrf_token, cookie = get_csrf_and_cookie_string(a)
 #         username = get_username(a)
 #         head = make_headers(csrf_token, cookie, username)
-        username = url + '/?taken-by=' + NAME
+        username = u'p/BQplF2Chs57' + u'/?taken-by=' + NAME
         head = make_headers(csrf_token, cookie, username)
+        # problem here
         print head
+        print type(head)
         s.headers.update(head)
 
         # for develop delete after - from
