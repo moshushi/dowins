@@ -13,11 +13,13 @@ import requests
 import logging
 import json
 import arrow
+import os
 import time
 
 ROOT_URL= u'https://www.instagram.com/'
 # NAME = u'sa.ny.aa'
 NAME = u'frenzytechnix'
+# NAME = u"polovinkinandrey"
 SUF = u'/?__a=1'
 QUERY_URL = u'https://www.instagram.com/query/'
 BASE_SUFFIX_POST = u'p/'
@@ -322,6 +324,7 @@ def get_raw_comments_from_page(url):
     """
     Get comments from post-foto
     """
+#     print 'Processing comments from posts'
 #     url = u'https://www.instagram.com/p/BQplF2Chs57'
 #     url = u'https://www.instagram.com/p/BPSRWn3Abpe'
 
@@ -344,12 +347,14 @@ def get_raw_comments_from_page(url):
 #     getco = json.loads(resp.text)[u'media'][u'comments'][u'page_info']
     getco = comm[u'page_info']
     if getco[u'has_next_page'] == False or getco[u'has_previous_page'] == False:
-        print "don't need more extended getting comment"
+#         print "don't need more extended getting comment"
+        print ".",
 #         print row_li[0]
 #         print row_li
         return row_li
 #     else:
-    print 'need more extended getting comment'
+#     print 'need more extended getting comment'
+    print ':'
     # Next string uncomment for continue developing
 #     row_li = get_post_comment(url)
 #     print row_li
@@ -417,6 +422,7 @@ def remake_main_data(some_str):
 #             print i
 #     print len(data_li)
 #     new_data_li = [i for i in data_li if i[u'is_video'] == False]
+    print 'Processing comments'
     new_data_li = [remake_dict(i) for i in data_li if i[u'is_video'] == False]
 #     print len(new_data_li)
 #     print new_data_li
@@ -436,17 +442,66 @@ def save_data(name, output):
 
 def processing_meta(name):
     """
-    Processing get metadata use Name and save it to json-file
+    Processing get metadata use Name and !save it to json-file
     """
 
     string_pf = workin_insta(ROOT_URL + name + SUF)
 #     print '---'
 #     print string_pf
     raw_data_li = remake_main_data(string_pf)
-    save_data(name, raw_data_li)
+    return raw_data_li
+#     save_data(name, raw_data_li)
+
+
+def saving_meta(name, meta_li):
+    save_data(name, meta_li)
+
+
+
+def get_name_image(url):
+    """
+    Get name image from their url
+    """
+    name_image = url.split(u'/')[-1]
+    return name_image
+
+
+def create_folder(directory):
+    """
+    Create folder for save file
+    """
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+def dumpimage(url, name):
+    """
+    Downloads image to folder-name-account
+    """
+    file_name = get_name_image(url)
+    complete_name = os.path.join(os.getcwd(), name, file_name)
+    r = requests.get(url, stream=True)
+    if r.status_code == 200:
+        with open(complete_name, 'wb') as f:
+            for chunk in r.iter_content(1024):
+                f.write(chunk)
+
+
+def processing_images(name, meta_li):
+    """
+    Downloads all image from link in metadata to sub-Name folder
+    """
+    create_folder(name)
+    print u'\nDownloading images'.encode('utf8')
+    for i in meta_li:
+#         print i[img-source]
+        dumpimage(i['img-source'], name)
+        print u'.',
+
 
 def main():
-    processing_meta(NAME)
+    metadat_list = processing_meta(NAME)
+    saving_meta(NAME, metadat_list)
+    processing_images(NAME, metadat_list)
 
 #     get_comments_from_page('aa')
 #     remake_comm('a')
