@@ -199,30 +199,26 @@ def workin_insta(url):
     return text
 
 
-def make_post_data_comm(user_id, cursor, counter):
+def make_post_data_comm(short_code, cursor, counter):
     """
     Make correct dictonary query for post_data
     """
     ### develop
-    short_code = u'BQplF2Chs57'
-    counter = u'50'
+#     short_code = u'BQplF2Chs57'
+#     counter = u'50'
 
-    dict_post = {'q': "ig_shortcode(" + short_code + ") { media.after(" +
+    dict_post = {'q': "ig_shortcode(" + short_code + ") { comments.before(" +
                  cursor + ", " + counter + ") {" +
+    "count,"
     "nodes {" +
-    "  caption," +
-    "  code," +
-    "  comments {" +
-    "    count" +
+    "  id," +
+    "  created_at," +
+    "  text," +
+    "  user {" +
+    "    id," +
+    "    profile_pic_url," +
+    "    username" +
     "  }," +
-    "  date," +
-    "  display_src," +
-    "  is_video," +
-    "  likes {" +
-    "    count" +
-    "  }," +
-    "  video_views" +
-    "}," +
     "page_info" +
     "}" +
     " }"
@@ -236,7 +232,8 @@ def get_post_comment(url):
     Make post request and get Full comment
     need return list of ['nodes']
     """
-    print 'Need list of comment use post requests'
+    url = u'https://www.instagram.com/p/BQplF2Chs57'
+    print '!!!!For get list of comment use post requests, dont forget retrun node_li'
     with requests.Session() as s:
         a = s.get(url)
         csrf_token, cookie = get_csrf_and_cookie_string(a)
@@ -244,8 +241,20 @@ def get_post_comment(url):
 #         head = make_headers(csrf_token, cookie, username)
         username = url + '/?taken-by=' + NAME
         head = make_headers(csrf_token, cookie, username)
+        print head
+        s.headers.update(head)
 
-#         s.headers.update(head)
+        # for develop delete after - from
+        short_code = u'BQplF2Chs57'
+        cursor = u'AQDRImLPBeiRKOcnQy7DTQHrdgaK_lT66uHzeak5Y6dDf2KAQVIsRb_OmrBLGRgbLbtvtj9etarR1T2WOTEXZFx3970npubmbGUYsAO-kYF621yf5LrGYY_zm9dAUx6_9sk'
+        counter = u'50'
+        # for develop delete after - to
+
+        post_data = make_post_data_comm(short_code, cursor, counter)
+        p = s.post(QUERY_URL, data=post_data)
+        print p.status_code
+        return p.text, p.status_code
+
 #         print a.text
 ########################################################################
 
@@ -269,7 +278,8 @@ def get_raw_comments_from_page(url):
     Get comments from post-foto
     """
     url = u'https://www.instagram.com/p/BQplF2Chs57'
-#     url = u'https://www.instagram.com/p/BQqQGRfBwFk'
+#     url = u'https://www.instagram.com/p/BPSRWn3Abpe'
+
     resp = requests.get(url + SUF)
     print resp.status_code
 #     print pretty_print_result(resp.text)
@@ -387,7 +397,8 @@ def main():
 #     remake_main_data('l')
 #     get_comments_from_page('aa')
 #     remake_comm('a')
-    get_post_comment(u'https://www.instagram.com/p/BPSRWn3Abpe')
+#     get_raw_comments_from_page('a')
+    get_post_comment('a')
 
 
 
