@@ -15,7 +15,7 @@
         <div class="info" v-if="item.comments.length > 0">
             <div class="comment-block">
                 <div class="comment" v-for="c in item.comments">
-                    <b>{{c.author}}</b> {{c.text}}
+                    <b>{{c.author}}</b> {{c.comment}}
                 </div>
             </div>
         </div>
