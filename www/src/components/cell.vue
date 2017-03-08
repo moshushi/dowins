@@ -2,7 +2,7 @@
 <div class="pure-g" v-if="item">
     <div class="pure-u-1-2">
         <div class="padded">
-            <div class="image" :style="'background-image: url(' + item['img-source'] + ')'">
+            <div class="image" :style="'background-image: url(' + item.imgHref + ')'">
                 <img :src="placeholder" class="pure-img"></a>
             </div>
         </div>

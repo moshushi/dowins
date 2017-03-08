@@ -37,6 +37,9 @@ function processInstagram(data) {
         item.displayDate = itemDate.toLocaleString('uk-UA');
         item.monthId = monthId;
         item.id = item.url.split('/')[4];
+        // get image src
+        item.imgHref = 'img/' + (item['img-source'].match(/\/([^\/]+?)$/))[1];
+        // create URL for next and previous images
         item.currentUrl = lib.makeUrl(item.monthId, item.id);
         // set previousID of current element and nextID of previous element
         item.nextUrl = null;
