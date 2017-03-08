@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="pure-g">
-            <div class="pure-u-1-5">
+            <div class="pure-u-1-5" style="height: 640px; overflow-y: scroll">
                 <menu-component :menuData="instagram.menuItems" :monthId="monthId"/>
             </div>
             <div class="pure-u-4-5">
