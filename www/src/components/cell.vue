@@ -3,7 +3,7 @@
     <div class="pure-u-1-2">
         <div class="padded">
             <div class="image" :style="'background-image: url(' + item.imgHref + ')'">
-                <img :src="placeholder" class="pure-img"></a>
+                <a :href="item.imgHref" target="_blank"><img :src="placeholder" class="pure-img"></a>
             </div>
         </div>
         <a class="pure-button" style="float:left" :href="item.previousUrl" v-if="item.previousUrl">&lt;</a>
