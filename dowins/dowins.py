@@ -480,7 +480,7 @@ def dumpimage(url, name):
     Downloads image to folder-name-account
     """
     file_name = get_name_image(url)
-    complete_name = os.path.join(os.getcwd(), name, FOLDER_IMAGE, file_name)
+    complete_name = os.path.abspath('{0}/{1}/{2}').format(name, FOLDER_IMAGE, file_name)
     r = requests.get(url, stream=True)
     if not os.path.isfile(complete_name):
         if r.status_code == 200:
