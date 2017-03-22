@@ -18,12 +18,13 @@ import time
 
 ROOT_URL= u'https://www.instagram.com/'
 # NAME = u'sa.ny.aa'
-NAME = u'frenzytechnix'
-# NAME = u"polovinkinandrey"
+# NAME = u'frenzytechnix'
+NAME = u"polovinkinandrey"
 SUF = u'/?__a=1'
 QUERY_URL = u'https://www.instagram.com/query/'
 BASE_SUFFIX_POST = u'p/'
 # NAME_URL = 'https://instagram.com/sa.ny.aa/?__a=1'
+FOLDER_IMAGE = u'img'
 
 
 def start_logging():
@@ -434,7 +435,8 @@ def remake_main_data(some_str):
 def save_data(name, output):
     """Write metadata to file
     """
-    namefile = name + u'.json'
+    create_folder(name)
+    namefile = os.path.abspath('{0}/data.json').format(name)
     with open(namefile, 'w') as json_file:
         data = json.dumps(output, indent=4, sort_keys=True, encoding='utf8')
         json_file.write(data)
@@ -478,22 +480,23 @@ def dumpimage(url, name):
     Downloads image to folder-name-account
     """
     file_name = get_name_image(url)
-    complete_name = os.path.join(os.getcwd(), name, file_name)
+    complete_name = os.path.join(os.getcwd(), name, FOLDER_IMAGE, file_name)
     r = requests.get(url, stream=True)
-    if r.status_code == 200:
-        with open(complete_name, 'wb') as f:
-            for chunk in r.iter_content(1024):
-                f.write(chunk)
+    if not os.path.isfile(complete_name):
+        if r.status_code == 200:
+            with open(complete_name, 'wb') as f:
+                for chunk in r.iter_content(1024):
+                    f.write(chunk)
 
 
 def processing_images(name, meta_li):
     """
     Downloads all image from link in metadata to sub-Name folder
     """
-    create_folder(name)
+#     create_folder(name)
+    create_folder(os.path.abspath('{0}/img').format(name))
     print u'\nDownloading images'.encode('utf8')
     for i in meta_li:
-#         print i[img-source]
         dumpimage(i['img-source'], name)
         print u'.',
 
