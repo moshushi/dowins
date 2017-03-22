@@ -15,6 +15,7 @@ import json
 import arrow
 import os
 import time
+import argparse
 
 ROOT_URL= u'https://www.instagram.com/'
 # NAME = u'sa.ny.aa'
@@ -26,6 +27,19 @@ BASE_SUFFIX_POST = u'p/'
 # NAME_URL = 'https://instagram.com/sa.ny.aa/?__a=1'
 FOLDER_IMAGE = u'img'
 
+
+def pars_argument():
+    """
+    Parsing name from command argument
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument("name", nargs='?', default='')
+    args = parser.parse_args()
+#     return args
+    if args.name == '':
+        print 'Need tell name account.'
+    else:
+        return args.name
 
 def start_logging():
     """
@@ -502,9 +516,11 @@ def processing_images(name, meta_li):
 
 
 def main():
-    metadat_list = processing_meta(NAME)
-    saving_meta(NAME, metadat_list)
-    processing_images(NAME, metadat_list)
+    name_account = pars_argument()
+    if name_account !=None:
+        metadat_list = processing_meta(name_account)
+        saving_meta(name_account, metadat_list)
+        processing_images(name_account, metadat_list)
 
 #     get_comments_from_page('aa')
 #     remake_comm('a')
