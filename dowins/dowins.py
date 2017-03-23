@@ -16,6 +16,7 @@ import arrow
 import os
 import time
 import argparse
+from tqdm import tqdm, trange
 
 ROOT_URL= u'https://www.instagram.com/'
 # NAME = u'sa.ny.aa'
@@ -438,7 +439,8 @@ def remake_main_data(some_str):
 #     print len(data_li)
 #     new_data_li = [i for i in data_li if i[u'is_video'] == False]
     print 'Processing comments'
-    new_data_li = [remake_dict(i) for i in data_li if i[u'is_video'] == False]
+#     new_data_li = [remake_dict(i) for i in data_li if i[u'is_video'] == False]
+    new_data_li = [remake_dict(i) for i in tqdm(data_li) if i[u'is_video'] == False]
 #     print len(new_data_li)
 #     print new_data_li
     return new_data_li
@@ -510,7 +512,7 @@ def processing_images(name, meta_li):
 #     create_folder(name)
     create_folder(os.path.abspath('{0}/img').format(name))
     print u'\nDownloading images'.encode('utf8')
-    for i in meta_li:
+    for i in tqdm(meta_li):
         dumpimage(i['img-source'], name)
         print u'.',
 
