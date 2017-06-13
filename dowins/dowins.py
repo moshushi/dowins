@@ -9,6 +9,7 @@ http://tomkdickinson.co.uk/2016/12/extracting-instagram-data-part-1/
 with correct post.query
 """
 
+import sys
 import requests
 import logging
 import json
@@ -29,18 +30,14 @@ BASE_SUFFIX_POST = u'p/'
 FOLDER_IMAGE = u'img'
 
 
-def pars_argument():
+def parse_args(args):
     """
     Parsing name from command argument
     """
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(args)
     parser.add_argument("name", nargs='?', default='')
-    args = parser.parse_args()
-#     return args
-    if args.name == '':
-        print 'Need tell name account.'
-    else:
-        return args.name
+    return parser.parse_args(args)
+
 
 def start_logging():
     """
@@ -518,8 +515,13 @@ def processing_images(name, meta_li):
 
 
 def main():
-    name_account = pars_argument()
-    if name_account !=None:
+    parser = parse_args(sys.argv[1:])
+    name_account = parser.name
+#     metadat_list = processing_meta(name_account)
+#     saving_meta(name_account, metadat_list)
+#     processing_images(name_account, metadat_list)
+#     print type(parser.name)
+    if name_account != '':
         metadat_list = processing_meta(name_account)
         saving_meta(name_account, metadat_list)
         processing_images(name_account, metadat_list)
