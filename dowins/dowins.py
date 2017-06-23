@@ -12,9 +12,11 @@ with correct post.query
 
 import requests
 import json
+import http.client as http_client
+http_client.HTTPConnection.debuglevel = 1
 
 
-BASE_URL = "https://www.instagram.com/"
+INSTAGRAM_ROOT = "https://www.instagram.com/"
 
 
 class PostsExtractor():
@@ -29,7 +31,7 @@ class PostsExtractor():
 
     @staticmethod
     def get_csrf_and_cookie_string():
-        resp = requests.head(BASE_URL)
+        resp = requests.head(INSTAGRAM_ROOT)
         return resp.cookies['csrftoken'], resp.headers['set-cookie']
 
 if __name__ == '__main__':
