@@ -63,6 +63,11 @@ class PostsExtractor():
 
 
     def get_headers_tom(self):
+        """
+        refer correct or no?
+        1) https://www.instagram.com/polovinkinandrey
+        2) https://www.instagram.com/
+        """
         return {
             "referer": "https://www.instagram.com/polovinkinandrey",
             "accept": "*/*",
