@@ -8,13 +8,15 @@ https://github.com/tomkdickinson/Instagram-Search-API-Python
 https://gist.github.com/tomkdickinson/a093d30523dd77ae970f3ffcf26e1344
 http://tomkdickinson.co.uk/2016/12/extracting-instagram-data-part-1/
 with correct post.query
+https://www.instagram.com/smena8m/media/
+https://stackoverflow.com/questions/17373886/how-can-i-get-a-users-media-from-instagram-without-authenticating-as-a-user
 """
 
 import requests
 import json
 from pprint import pprint
-import http.client as http_client
-http_client.HTTPConnection.debuglevel = 1
+# import http.client as http_client
+# http_client.HTTPConnection.debuglevel = 1
 
 
 INSTAGRAM_ROOT = "https://www.instagram.com/"
@@ -79,6 +81,24 @@ class PostsExtractor():
             "X-Requested-With": "XMLHttpRequest"
         }
 
+    def get_headers_chrome(self):
+        return {
+            "referer": "https://www.instagram.com/polovinkinandrey",
+            "accept": "*/*",
+            "Accept-Language": "en-GB,en;q=0.8",
+            "cache-control": "no-cache",
+            "content-length": "40",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "cookie": self.cookie_string,
+            "origin": "https://www.instagram.com",
+            "pragma": "no-cache",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/56.0.2924.87 Safari/537.36",
+            "x-csrftoken": self.csrf_token,
+            "x-instagram-ajax": "1",
+            "X-Requested-With": "XMLHttpRequest"
+        }
 
     def extract_user_profile(self, user_id=None):
         if user_id is None:
@@ -181,6 +201,45 @@ class PostsExtractor():
             "}" +
             " }"
         }
+
+
+
+    def get_userdata_params_new_2(self):
+        start_query = "ig_user({0}) {{ media.after({1}), {2} {{".format(self.user_id, self.cursor, self.counter)
+
+        return {
+            "q":
+            start_query +
+            " count," +
+            " nodes [{" +
+            " __typename," +
+            " caption," +
+            " code," +
+            " comments {" +
+            "   count" +
+            " }," +
+            " date, " +
+            " dimentions, " +
+            " display_src," +
+            " gating_info," +
+            " id," +
+            " is_video," +
+            " likes {" +
+            "   count" +
+            " }," +
+            " media_prewiew" +
+            " owner {" +
+            "   id" +
+            " }," +
+            " thumbnail_resources" +
+            " thumbnail_src" +
+            "}]," +
+            "page_info" +
+            "}" +
+            " }"
+        }
+
+
     def extract_some_information(self, user_id=None):
         if user_id is None:
             user_id = self.extract_user_profile()
