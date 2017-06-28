@@ -12,8 +12,9 @@ with correct post.query
 
 import requests
 import json
-# import http.client as http_client
-# http_client.HTTPConnection.debuglevel = 1
+from pprint import pprint
+import http.client as http_client
+http_client.HTTPConnection.debuglevel = 1
 
 
 INSTAGRAM_ROOT = "https://www.instagram.com/"
@@ -59,6 +60,26 @@ class PostsExtractor():
         }
 
 
+    def get_headers_tom(self):
+        return {
+            "referer": "https://www.instagram.com/polovinkinandrey",
+            "accept": "*/*",
+            "Accept-Language": "en-GB,en;q=0.8",
+            "cache-control": "no-cache",
+            "content-length": "40",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "cookie": self.cookie_string,
+            "origin": "https://www.instagram.com",
+            "pragma": "no-cache",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/56.0.2924.87 Safari/537.36",
+            "x-csrftoken": self.csrf_token,
+            "x-instagram-ajax": "1",
+            "X-Requested-With": "XMLHttpRequest"
+        }
+
+
     def extract_user_profile(self, user_id=None):
         if user_id is None:
             user_id = json.loads(requests.get(INSTAGRAM_ROOT + self.username + "?__a=1").text)['user']['id']
@@ -98,23 +119,103 @@ class PostsExtractor():
         return dict_post
         pass
 
+    def get_userdata_params_tom(self):
+#         start_query = "ig_user(%s) " % (self.user_id)
+#         " {media.after(%s +", " + %s ) {" % (self.cursor, self.counter)
+        start_query = "ig_user({0}) {{ media.after({1}), {2} {{".format(self.user_id, self.cursor, self.counter)
 
+        return {
+            "q":
+            start_query +
+            " count," +
+            " nodes {" +
+            " code," +
+            " comments {" +
+            "   count" +
+            " }," +
+            " data, " +
+            " display_src," +
+            " is_video," +
+            " likes {" +
+            "   count" +
+            " }," +
+            " video_views" +
+            "}," +
+            "page_info" +
+            "}" +
+            " }"
+        }
+#         return start_query
+
+    def get_userdata_params_new(self):
+        start_query = "ig_user({0}) {{ media.after({1}), {2} {{".format(self.user_id, self.cursor, self.counter)
+
+        return {
+            "q":
+            start_query +
+            " count," +
+            " nodes [{" +
+            " __typename," +
+            " caption," +
+            " code," +
+            " comments {" +
+            "   count" +
+            " }," +
+            " date, " +
+            " dimentions, " +
+            " display_src," +
+            " gating_info," +
+            " id," +
+            " is_video," +
+            " likes {" +
+            "   count" +
+            " }," +
+            " media_prewiew" +
+            " owner {" +
+            "   id" +
+            " }," +
+            " thumbnail_resources" +
+            " thumbnail_src" +
+            "}]," +
+            "page_info" +
+            "}" +
+            " }"
+        }
     def extract_some_information(self, user_id=None):
         if user_id is None:
             user_id = self.extract_user_profile()
         req = json.loads(requests.get(INSTAGRAM_ROOT + self.username + "?__a=1").text)
-        self.counter = req['user']['media']['count'] #all sum user's post
-        self.cursor = req['user']['media']['page_info']['end_cursor']
+        self.counter = str(req['user']['media']['count']) #all sum user's post
+        self.cursor = str(req['user']['media']['page_info']['end_cursor'])
         self.user_id = str(user_id)
 #         req = requests.get(INSTAGRAM_ROOT + self.username + "?__a=1").text
+#         pprint (req)
+#         pprint (req.status_code)
+#         pprint (req.url)
+#         pprint (req.requests)
+#         dir(req)
         return req
 
 
     def users_posts(self):
-        headers = self.get_headers()
-        post_data = self.get_userdata_params()
+#         headers = self.get_headers()
+        headers = self.get_headers_tom()
+#         post_data = self.get_userdata_params()
+#         post_data = self.get_userdata_params_tom()
+        post_data = self.get_userdata_params_new()
         req = requests.post(INSTAGRAM_ROOT + "query/", data = post_data, headers = headers)
+#         session = requests.Session()
+#         req = session.post(INSTAGRAM_ROOT + "query/", data = post_data, headers = headers)
 #         return json.loads(req.text)
+
+#         print (req.status_code)
+#         print (req.history)
+#         print (req.headers)
+
+#         pprint(req.json())
+        print('AAA')
+        pprint(req.url)
+#         pprint(req.cookie)
         return len(req.text)
         pass
         pass
@@ -124,21 +225,20 @@ class PostsExtractor():
 
 if __name__ == '__main__':
     acc = 'polovinkinandrey'
-    acc = 'abc'
+#     acc = 'abc'
     postextract = PostsExtractor(acc)
     print(postextract.extract_user_profile())
-    print(postextract.extract_some_information())
+    pprint(postextract.extract_some_information())
     print(postextract.counter)
     print(postextract.cursor)
     print('----')
-    print(postextract.get_userdata_params())
+#     print(postextract.get_userdata_params())
+#     pprint (postextract.get_userdata_params_tom())
+    pprint (postextract.get_userdata_params_new())
     print('====')
-    print(postextract.users_posts())
+#     print(postextract.users_posts())
+    print (postextract.users_posts())
+    print('****')
 
-#     print postextract.get_headers()
-#     print(postextract.username)
-#     print(postextract.csrf_token)
-#     print(postextract.cookie_string)
-#     print(postextract.text)
 
 
