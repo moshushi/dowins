@@ -63,47 +63,37 @@ class PostsExtractor():
         }
 
 
-    @staticmethod
-    def extract_user_profile(username):
+    def extract_user_id(self, user_id=None):
+        if user_id is None:
+            user_id = json.loads(
+                requests.get(INSTAGRAM_ROOT + self.username + SUF).text
+            )['user']['id']
+        return user_id
+
+
+    def extract_some_information(self, user_id=None):
         """
-        Maybe we don't need this method
         """
-        response = requests.get(INSTAGRAM_ROOT + username + SUF)
+        if user_id is None:
+            user_id = self.extract_user_profile()
+#         req = json.loads(requests.get(INSTAGRAM_ROOT + self.username + SUF).text)
+        response = requests.get(INSTAGRAM_ROOT + self.username + SUF)
         req = json.loads(response.text)
 
-        counter = str(req['user']['media']['count']) #all sum user's post
-        cursor = str(req['user']['media']['page_info']['end_cursor'])
-        user_id = str(user_id)
+        self.counter = str(req['user']['media']['count']) #all sum user's post
+        self.cursor = str(req['user']['media']['page_info']['end_cursor'])
+        self.user_id = str(user_id)
 
 #         print (response.url)
 #         print (response.status_code)
 
-#         return req
-        return user_id, counter, cursor
-
-
-    def get_posts_page(self, username, end_cursor=None):
-        """
-        Get page from username and end_cursor
-        !!!! Need end_cursor add for get
-        """
-#         if end_cursor != None:
-#             max_id
-        payload = {'max_id': end_cursor}
-        response = requests.get(INSTAGRAM_ROOT + username + SUF, params=payload)
-        req = json.loads(response.text)
         return req
-
 
     def extract_posts(self, username):
         """
         Print '1' for every page with post
         """
-        req = self.get_posts_page(username)
-        print('1')
-        while req['user']['media']['page_info']['has_next_page']:
-            req = self.get_posts_page(username, req['user']['media']['page_info']['end_cursor'])
-            print('2')
+        req = self.extract_some_information
 
 
 
@@ -116,5 +106,5 @@ if __name__ == '__main__':
 #     print(postextract.extract_user_profile())
 
 #     pprint(postextract.extract_some_information())
-    postextract.extract_posts(acc)
+    postextract.extract_some_information()
 #     print (postextract.users_posts())
