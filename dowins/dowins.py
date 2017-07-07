@@ -21,6 +21,7 @@ from pprint import pprint
 
 INSTAGRAM_ROOT = "https://www.instagram.com/"
 SUF = "?__a=1"
+MEDIA = "/media/?size=L"
 
 
 class PostsExtractor():
@@ -84,8 +85,9 @@ class PostsExtractor():
 
     def get_posts_page(self, username, end_cursor=None):
         """
-        Get page from username and end_cursor
+        Get page General Information from username and end_cursor
         !!!! Need end_cursor add for get
+        We can use it function or the same function with suffix MEDIA
         """
 #         if end_cursor != None:
 #             max_id
@@ -101,11 +103,51 @@ class PostsExtractor():
         """
         req = self.get_posts_page(username)
         print('1')
+        info = []
+#         info = req['user']['media']
+        info.append(req['user']['media'])
+        ### need coorect info and function for remake it
         while req['user']['media']['page_info']['has_next_page']:
             req = self.get_posts_page(username, req['user']['media']['page_info']['end_cursor'])
             print('2')
+            print(req['user']['media']['page_info']['end_cursor'])
+#             info += req['user']['media']
+            info.append(req['user']['media'])
+            ### need correct info how above
+
+        return info
 
 
+    def get_posts_page_media(self, username, end_cursor=None):
+        """
+        Get page General Information with Comments from username and end_cursor
+        !!!! Need end_cursor add for get
+        We can use it function or the same function without suffix MEDIA
+        """
+        payload = {'max_id': end_cursor}
+        response = requests.get(INSTAGRAM_ROOT + username + MEDIA, params=payload)
+        req = json.loads(response.text)
+        return req
+
+
+    def extract_posts_media(self, username):
+        """
+        Print '1' for every page with post
+        Experemental with use MEDIA and max_id
+        in construction....
+        """
+        req = self.get_posts_page(username)
+        print('1')
+        pprint(req)
+        print (type(req))
+        print (len(req['items']))
+        bal = []
+        for i in req['items']:
+            print (i['id'])
+            bal.append(i['id'])
+        print (bal)
+        print (max(bal))
+        self.cursor = max(bal)
 
 
 if __name__ == '__main__':
