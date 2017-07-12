@@ -72,9 +72,11 @@ class PostsExtractor():
         response = requests.get(INSTAGRAM_ROOT + username + SUF)
         req = json.loads(response.text)
 
+#         pprint(req)
+
         counter = str(req['user']['media']['count']) #all sum user's post
         cursor = str(req['user']['media']['page_info']['end_cursor'])
-        user_id = str(user_id)
+        user_id = str(req['user']['id'])
 
 #         print (response.url)
 #         print (response.status_code)
@@ -154,9 +156,10 @@ if __name__ == '__main__':
     acc = 'polovinkinandrey'
 #     acc = 'sa.ny.aa'
     postextract = PostsExtractor(acc)
+    print (postextract.extract_user_profile(acc))
 
 #     print(postextract.extract_user_profile())
 
 #     pprint(postextract.extract_some_information())
-    postextract.extract_posts(acc)
+#     postextract.extract_posts(acc)
 #     print (postextract.users_posts())
