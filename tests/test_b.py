@@ -13,4 +13,5 @@ def test_user_id(data_small_p):
     assert dowins.PostsExtractor.extract_user_profile('polovinkinandrey')[0] == str(1577167408)
     assert dowins.PostsExtractor.extract_user_profile('polovinkinandrey')[1] == str(6)
 
-
+def test_user_id(data_small_p):
+    pass
