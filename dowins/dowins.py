@@ -20,7 +20,7 @@ from pprint import pprint
 
 
 INSTAGRAM_ROOT = "https://www.instagram.com/"
-SUF = "?__a=1"
+SUF = "/?__a=1"
 MEDIA = "/media/?size=L"
 
 
@@ -129,6 +129,10 @@ class PostsExtractor():
         payload = {'max_id': end_cursor}
         response = requests.get(INSTAGRAM_ROOT + username + MEDIA, params=payload)
         req = json.loads(response.text)
+        print('-----')
+        print (req.url)
+        print (response.url)
+        print('-----')
         return req
 
 
@@ -155,11 +159,13 @@ class PostsExtractor():
 if __name__ == '__main__':
     acc = 'polovinkinandrey'
 #     acc = 'sa.ny.aa'
+    acc = 'keenna_official'
     postextract = PostsExtractor(acc)
-    print (postextract.extract_user_profile(acc))
+#     print (postextract.extract_user_profile(acc))
 
 #     print(postextract.extract_user_profile())
 
 #     pprint(postextract.extract_some_information())
-#     postextract.extract_posts(acc)
+    postextract.extract_posts(acc)
 #     print (postextract.users_posts())
+#     print(PostsExtractor.get_csrf_and_cookie_string())
