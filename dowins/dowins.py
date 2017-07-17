@@ -37,8 +37,8 @@ class PostsExtractor():
         self.user_id = None
 
     @staticmethod
-    def get_csrf_and_cookie_string():
-        resp = requests.head(INSTAGRAM_ROOT)
+    def get_csrf_and_cookie_string(url=INSTAGRAM_ROOT):
+        resp = requests.head(url)
         return resp.cookies['csrftoken'], resp.headers['set-cookie']
 
 
