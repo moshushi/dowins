@@ -21,6 +21,8 @@ print (r.cookies['foo'])
 
 
 def test_F():
+    pass
+
 @httmock.all_requests
 def response_content(url, request):
 	headers = {'content-type': 'application/json',

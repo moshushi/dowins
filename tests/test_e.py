@@ -33,6 +33,7 @@ def test_D():
 #     resp = session.get('mock://test.com/7')
 #     return resp.cookies['foo']
 #     return requests_mock.adapter
+    pass
 
 if __name__ == '__main__':
     a = test_D()
