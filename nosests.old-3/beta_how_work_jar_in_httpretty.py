@@ -15,9 +15,6 @@ with open('new_cookie_string_jar.txt', 'r') as f:
     my_cookies_jar = requests.utils.cookiejar_from_dict(my_cookies_dic)
 
 
-with open('new_cookie_string.txt', 'r') as f:
-    cookie_string = f.readline()
-
 
 def get_csrf(url):
     r = requests.get(url)
